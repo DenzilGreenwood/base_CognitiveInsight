@@ -101,12 +101,6 @@ export default function CognitiveInsightLanding() {
   const [persistExpanded, setPersistExpanded] = useState(false);
   const TEMP_WORKSPACE_ENABLED = true;
 
-  const handleWhitePaper = () => {
-    alert(
-      "Thanks! We'll share the white paper via email after a quick intro call. (In production, this button routes to your form or CRM.)"
-    );
-  };
-
   const handleDemo = () => {
     alert(
       'Launching Demo Simulation... (In production, route to /demo or open the interactive simulator.)'
@@ -176,19 +170,19 @@ export default function CognitiveInsightLanding() {
               Turn Confusion into <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-fuchsia-300">Cryptographic Clarity</span>
             </motion.h1>
             <p className="max-w-3xl text-indigo-100/90 text-lg">
-              Cognitive Insight™ connects <strong>regulators</strong>, <strong>auditors</strong>, and <strong>AI companies</strong>
-              with cryptographically verifiable auditability. We bridge policy, assurance, and engineering—without exposing
-              sensitive models or data.
+              Cognitive Insight™ bridges regulators, auditors, and AI providers with
+              cryptographically verifiable auditability. We connect policy, assurance, 
+              and engineering—without exposing sensitive models or data.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <Button onClick={() => document.querySelector('#whitepaper-form')?.scrollIntoView({ behavior: 'smooth' })}>
-                <FileText className="w-4 h-4" /> Request White Paper
+              <Button onClick={handlePilot}>
+                <Handshake className="w-4 h-4" /> Request Pilot
               </Button>
               <Button variant="secondary" onClick={handleDemo}>
                 <Activity className="w-4 h-4" /> Explore Demo
               </Button>
-              <Button variant="ghost" onClick={handlePilot}>
-                <Handshake className="w-4 h-4" /> Request Pilot <ArrowRight className="w-4 h-4" />
+              <Button variant="ghost" onClick={() => document.querySelector('#whitepaper-form')?.scrollIntoView({ behavior: 'smooth' })}>
+                <FileText className="w-4 h-4" /> Request White Paper <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8 w-full max-w-3xl">
@@ -213,7 +207,7 @@ export default function CognitiveInsightLanding() {
         <SectionHeader
           kicker="Origin"
           title="From Middle-School Ciphers to Verifiable AI"
-          subtitle="A lifelong thread: solving local problems that reveal global opportunity."
+          subtitle="Founded by a compliance professional and data scientist, Cognitive Insight™ is built to bridge technical, policy, and assurance communities — making verifiable AI practical."
         />
         <div className="mt-10 grid md:grid-cols-2 gap-6">
           <Card>
@@ -319,8 +313,7 @@ export default function CognitiveInsightLanding() {
               <div>
                 <h3 className="font-semibold text-white">Proof Capsules</h3>
                 <p className="text-indigo-100/90">
-                  Tamper-evident receipts for training, inference, configuration, and compliance events. Auditors and
-                  regulators can independently verify without accessing sensitive data.
+                  Cryptographically verifiable receipts covering training runs, inference logs, system configurations, and compliance checkpoints.
                 </p>
               </div>
             </div>
@@ -331,8 +324,7 @@ export default function CognitiveInsightLanding() {
               <div>
                 <h3 className="font-semibold text-white">LCM Efficiency</h3>
                 <p className="text-indigo-100/90">
-                  Generate capsules on demand for the events that matter. Our internal tests show ~{formatPercent(STORAGE_SAVINGS * 100)}
-                  storage reduction versus eager logging.
+                  Generate capsules on demand for the events that matter. Our tests show a ≈{formatPercent(STORAGE_SAVINGS * 100)} reduction in long-term storage (capsules-only mode; expanded evidence optional & policy-dependent).
                 </p>
               </div>
             </div>
@@ -558,7 +550,7 @@ export default function CognitiveInsightLanding() {
               ))}
             </ol>
             <div className="mt-6 text-sm text-indigo-200/90">
-              Verification may occur client-side (WebCrypto) or server-side. Persistent storage remains capsules unless expanded evidence is explicitly persisted.
+             Verification may occur client-side (WebCrypto) or server-side, depending on assurance requirements. Persistent storage remains capsules unless expanded evidence is explicitly persisted.
             </div>
           </Card>
         </div>
@@ -635,5 +627,3 @@ export default function CognitiveInsightLanding() {
     </main>
   );
 }
-
-    
