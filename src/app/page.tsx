@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useMemo, useState } from 'react';
@@ -671,11 +672,19 @@ export default function CognitiveInsightLanding() {
               <label className="block text-sm text-indigo-200">Organization & Role</label>
               <input name="orgRole" className="mt-1 w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Regulator, Auditor, or AI Company" />
             </div>
-            <div className="sm:col-span-2 flex items-center gap-3 pt-2">
-              <Button type="submit">
-                <FileText className="w-4 h-4" /> Request White Paper
-              </Button>
-              <p className="text-sm text-indigo-300/80">Patent-pending. Cryptographic implementations withheld.</p>
+            <div className="sm:col-span-2 flex flex-col items-start gap-3 pt-2">
+              <div className="flex items-center gap-3">
+                <Button type="submit">
+                  <FileText className="w-4 h-4" /> Request White Paper
+                </Button>
+                <p className="text-sm text-indigo-300/80">Patent-pending. Cryptographic implementations withheld.</p>
+              </div>
+              <p className="text-xs text-indigo-200/70 mt-2">
+                By submitting, you agree that your name, email, and organization will be stored securely. 
+                We collect this information only to measure reach and provide updates about AI compliance 
+                and CognitiveInsight. You may request deletion at any time by emailing{' '}
+                <a href="mailto:founder@CognitiveInsight.ai" className="underline hover:text-white">founder@CognitiveInsight.ai</a>.
+              </p>
             </div>
           </form>
         </Card>
@@ -743,3 +752,6 @@ export default function CognitiveInsightLanding() {
     </main>
   );
 }
+
+
+    
