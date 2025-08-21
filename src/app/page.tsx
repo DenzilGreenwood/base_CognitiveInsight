@@ -94,7 +94,11 @@ const formatPercent = (n: number) => `${Math.round(n)}%`;
 export default function CognitiveInsightLanding() {
   const [dataset, setDataset] = useState(300);
   const [auditRatio, setAuditRatio] = useState(10);
-  const storageSaved = useMemo(() => 85, []);
+  
+  const STORAGE_SAVINGS = 0.90; // stable, near-constant savings for commitments vs payloads
+  const [cacheWarm, setCacheWarm] = useState(true);
+  const [persistExpanded, setPersistExpanded] = useState(false);
+  const TEMP_WORKSPACE_ENABLED = true;
 
   const handleWhitePaper = () => {
     alert(
@@ -107,11 +111,15 @@ export default function CognitiveInsightLanding() {
       'Launching Demo Simulation... (In production, route to /demo or open the interactive simulator.)'
     );
   };
+  
+  const submitLead = (type: string) => {
+     alert(
+      `Thanks for your interest in a ${type}! We'll follow up to schedule a scoping conversation.`
+    );
+  }
 
   const handlePilot = () => {
-    alert(
-      "Thanks for your interest in a pilot! We'll follow up to schedule a scoping conversation."
-    );
+    submitLead('pilot');
   };
 
   const estimatedRetrievalMs = useMemo(() => {
@@ -157,7 +165,7 @@ export default function CognitiveInsightLanding() {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-8 w-full max-w-3xl">
               {[
-                { label: 'Storage Savings', value: '~85%' },
+                { label: 'Storage Savings', value: `~${formatPercent(STORAGE_SAVINGS * 100)}` },
                 { label: 'Verification', value: '~' + estimatedRetrievalMs + 'ms' },
                 { label: 'Alignment', value: 'NIST • ISO • EU AI Act' },
                 { label: 'Privacy', value: 'No model/data exposure' },
@@ -295,7 +303,7 @@ export default function CognitiveInsightLanding() {
               <div>
                 <h3 className="font-semibold text-white">LCM Efficiency</h3>
                 <p className="text-indigo-100/90">
-                  Generate capsules on demand for the events that matter. Our internal tests show ~{formatPercent(storageSaved)}
+                  Generate capsules on demand for the events that matter. Our internal tests show ~{formatPercent(STORAGE_SAVINGS * 100)}
                   storage reduction versus eager logging.
                 </p>
               </div>
@@ -373,75 +381,156 @@ export default function CognitiveInsightLanding() {
       <section className="container mx-auto px-6 py-16 md:py-20 max-w-6xl">
         <SectionHeader
           kicker="Demo"
-          title="Interactive Simulation"
-          subtitle="Patent-pending demonstration. Cryptographic details are proprietary."
+          title="Interactive Simulation (Demonstration Only)"
+          subtitle="Results are simulated for illustration; actual performance varies by workload and environment."
         />
         <div className="mt-10 grid lg:grid-cols-3 gap-6">
           <Card className="lg:col-span-2">
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-3 gap-6">
               <div>
-                <label className="text-sm text-indigo-200">Dataset Size</label>
+                <label htmlFor="dataset" className="text-sm text-indigo-200">Dataset Size (GB)</label>
                 <input
+                  id="dataset"
+                  aria-label="Dataset size in gigabytes"
                   type="range"
-                  min={50}
-                  max={5000}
+                  min={10}
+                  max={10000}
+                  step={10}
                   value={dataset}
                   onChange={(e) => setDataset(parseInt(e.target.value))}
                   className="w-full accent-indigo-500"
                 />
-                <p className="text-indigo-100 mt-1">{dataset.toLocaleString()} records</p>
+                <p className="text-indigo-100 mt-1">{dataset.toLocaleString()} GB</p>
               </div>
               <div>
-                <label className="text-sm text-indigo-200">Audit Ratio</label>
+                <label htmlFor="auditRatio" className="text-sm text-indigo-200">
+                  Audit Ratio (%)
+                </label>
                 <input
+                  id="auditRatio"
+                  aria-label="Audit ratio percentage"
                   type="range"
                   min={5}
                   max={50}
+                  step={1}
                   value={auditRatio}
                   onChange={(e) => setAuditRatio(parseInt(e.target.value))}
                   className="w-full accent-fuchsia-500"
                 />
-                <p className="text-indigo-100 mt-1">{auditRatio}% of events → proof capsules</p>
+                <p className="text-indigo-100 mt-1">
+                  {auditRatio}% of events → proof capsules
+                </p>
+              </div>
+              <div>
+                <label htmlFor="cacheMode" className="text-sm text-indigo-200">Cache Mode</label>
+                <select
+                  id="cacheMode"
+                  aria-label="Cache mode"
+                  className="mt-1 w-full rounded-xl bg-white/10 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  onChange={(e) => setCacheWarm(e.target.value === "warm")}
+                >
+                  <option value="warm">Warm (cached)</option>
+                  <option value="cold">Cold (no cache)</option>
+                </select>
               </div>
             </div>
-            <div className="mt-6 grid sm:grid-cols-3 gap-6">
+
+            {/* Derived metrics */}
+            <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card>
-                <p className="text-sm text-indigo-200/90">Estimated Storage Saved</p>
-                <p className="text-2xl font-bold">≈ {formatPercent(storageSaved)}</p>
+                <p className="text-sm text-indigo-200/90">Baseline Size</p>
+                <p className="text-2xl font-bold">{dataset.toLocaleString()} GB</p>
+              </Card>
+              <Card>
+                <p className="text-sm text-indigo-200/90">Persistent Audit Footprint</p>
+                <p className="text-2xl font-bold">
+                  {(dataset * (1 - STORAGE_SAVINGS)).toLocaleString()} GB
+                </p>
+                <p className="text-xs text-indigo-300/80">
+                  ≈ {formatPercent(STORAGE_SAVINGS * 100)} reduction (capsules only)
+                </p>
               </Card>
               <Card>
                 <p className="text-sm text-indigo-200/90">Retrieval Time</p>
-                <p className="text-2xl font-bold">≈ {estimatedRetrievalMs} ms</p>
+                <p className="text-2xl font-bold">
+                  ≈ {cacheWarm ? estimatedRetrievalMs : Math.round(estimatedRetrievalMs * 3)} ms
+                </p>
+                <p className="text-xs text-indigo-300/80">
+                  Warm vs cold cache, simulated
+                </p>
               </Card>
               <Card>
                 <p className="text-sm text-indigo-200/90">Capsules Generated*</p>
-                <p className="text-2xl font-bold">{Math.round((dataset * auditRatio) / 100).toLocaleString()}</p>
+                <p className="text-2xl font-bold">
+                  {Math.round(auditRatio * 125).toLocaleString()}
+                </p>
+                <p className="text-xs text-indigo-300/80">*Illustrative count</p>
               </Card>
             </div>
-            <p className="text-xs text-indigo-300/80 mt-3">*Simulated for illustration. Actual performance varies by workload.</p>
-            <div className="mt-6">
+
+            <div className="mt-4 grid sm:grid-cols-2 gap-6">
+              <Card>
+                <p className="text-sm text-indigo-200/90">Temporary Audit Workspace</p>
+                <p className="text-2xl font-bold">
+                  {TEMP_WORKSPACE_ENABLED
+                    ? Math.round(dataset * Math.min(0.1, auditRatio / 100)).toLocaleString() + " GB"
+                    : "0 GB"}
+                </p>
+                <p className="text-xs text-indigo-300/80">
+                  Only used if artifacts are materialized during verification; not persisted.
+                </p>
+              </Card>
+              <Card>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-indigo-200/90">Persist expanded evidence</span>
+                  <input
+                    type="checkbox"
+                    aria-label="Persist expanded evidence"
+                    className="h-5 w-5 accent-indigo-500"
+                    onChange={(e) => setPersistExpanded(e.target.checked)}
+                  />
+                </div>
+                <p className="text-xs text-indigo-300/80 mt-2">
+                  When ON, long-term storage will include expanded evidence bundles (policy-dependent).
+                </p>
+              </Card>
+            </div>
+
+            <p className="text-xs text-indigo-300/80 mt-3">
+              No real data processed in this demo. Patent-pending; cryptographic implementations withheld.
+            </p>
+
+            <div className="mt-6 flex gap-3">
               <Button onClick={handleDemo}>
                 <Activity className="w-4 h-4" /> Generate & Verify
               </Button>
+              <Button variant="secondary" onClick={() => submitLead("pilot")}>
+                <ShieldCheck className="w-4 h-4" /> Run a Real Pilot
+              </Button>
             </div>
           </Card>
+
           <Card>
-            <ol className="space-y-4">
+            <ol className="space-y-4" aria-label="Capsule lifecycle steps">
               {[
-                { label: 'Generate', icon: <Database className="w-4 h-4" /> },
-                { label: 'Select', icon: <CheckCircle2 className="w-4 h-4" /> },
-                { label: 'Infer', icon: <Activity className="w-4 h-4" /> },
-                { label: 'Capsule', icon: <Receipt className="w-4 h-4" /> },
-                { label: 'Verify', icon: <ShieldCheck className="w-4 h-4" /> },
+                { label: "Generate", icon: <Database className="w-4 h-4" /> },
+                { label: "Select", icon: <CheckCircle2 className="w-4 h-4" /> },
+                { label: "Infer", icon: <Activity className="w-4 h-4" /> },
+                { label: "Capsule", icon: <Receipt className="w-4 h-4" /> },
+                { label: "Verify", icon: <ShieldCheck className="w-4 h-4" /> },
               ].map((s, i) => (
                 <li key={s.label} className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">{s.icon}</span>
-                  <span className="text-indigo-100">{i + 1}. {s.label}</span>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
+                    {s.icon}
+                  </span>
+                  <span className="text-indigo-100">
+                    {i + 1}. {s.label}
+                  </span>
                 </li>
               ))}
             </ol>
             <div className="mt-6 text-sm text-indigo-200/90">
-              This flow simulates CIAF’s capsule lifecycle end-to-end without exposing proprietary cryptographic methods.
+              Verification may occur client-side (WebCrypto) or server-side. Persistent storage remains capsules unless expanded evidence is explicitly persisted.
             </div>
           </Card>
         </div>
