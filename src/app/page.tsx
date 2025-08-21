@@ -42,9 +42,10 @@ const Button: React.FC<{
   variant?: 'primary' | 'secondary' | 'ghost';
   className?: string;
   type?: 'button' | 'submit' | 'reset';
-}> = ({ children, onClick, as = 'button', href, variant = 'primary', className = '', type = 'button' }) => {
+  disabled?: boolean;
+}> = ({ children, onClick, as = 'button', href, variant = 'primary', className = '', type = 'button', disabled = false }) => {
   const base =
-    'inline-flex items-center gap-2 rounded-2xl px-5 py-3 font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2';
+    'inline-flex items-center gap-2 rounded-2xl px-5 py-3 font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   const styles: Record<string, string> = {
     primary:
       'bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-400 dark:focus:ring-indigo-600',
@@ -61,7 +62,7 @@ const Button: React.FC<{
     );
   }
   return (
-    <button type={type} className={`${base} ${styles[variant]} ${className}`} onClick={onClick}>
+    <button type={type} disabled={disabled} className={`${base} ${styles[variant]} ${className}`} onClick={onClick}>
       {children}
     </button>
   );
@@ -108,8 +109,10 @@ export default function CognitiveInsightLanding() {
     verified: boolean;
     proofSample?: { leaf: string; path: string[] };
   }>(null);
-
   const TEMP_WORKSPACE_ENABLED = true;
+  const [showPilotModal, setShowPilotModal] = useState(false);
+  const [busy, setBusy] = useState(false);
+
 
   // helper to POST JSON
   async function postJSON<T>(url: string, body: any): Promise<T> {
@@ -120,6 +123,30 @@ export default function CognitiveInsightLanding() {
     });
     if (!r.ok) throw new Error(await r.text());
     return r.json();
+  }
+
+  async function submitPilot(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setBusy(true);
+    const fd = new FormData(e.currentTarget);
+    const payload = {
+      name: String(fd.get("name") || "").trim(),
+      email: String(fd.get("email") || "").trim(),
+      orgRole: String(fd.get("orgRole") || "").trim(),
+      notes: String(fd.get("notes") || "").trim(),
+      preferredTime: String(fd.get("preferredTime") || "").trim(),
+      type: "pilot",                // or "demo" if you add a separate button
+      source: "cta_be_part_bridge"  // helpful for analytics
+    };
+    try {
+      await postJSON("/api/leads", payload);
+      // send them to calendar booking
+      window.location.href = "/thank-you?next=/book";
+    } catch (err:any) {
+      alert("Could not submit: " + err.message);
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function handleGenerateAndVerify() {
@@ -164,9 +191,7 @@ export default function CognitiveInsightLanding() {
   }
 
   const submitLead = (type: string) => {
-     alert(
-      `Thanks for your interest in a ${type}! We'll follow up to schedule a scoping conversation.`
-    );
+     setShowPilotModal(true);
   }
 
   async function submitWhitepaperLead(e: React.FormEvent<HTMLFormElement>) {
@@ -197,7 +222,7 @@ export default function CognitiveInsightLanding() {
   }
 
   const handlePilot = () => {
-    submitLead('pilot');
+    setShowPilotModal(true);
   };
 
   const estimatedRetrievalMs = useMemo(() => {
@@ -577,7 +602,7 @@ export default function CognitiveInsightLanding() {
             </p>
 
             <div className="mt-6 flex gap-3">
-              <Button onClick={handleGenerateAndVerify} className={isWorking ? "opacity-60 cursor-not-allowed" : ""}>
+              <Button onClick={handleGenerateAndVerify} className={isWorking ? "opacity-60 cursor-not-allowed" : ""} disabled={isWorking}>
                 <Activity className="w-4 h-4" />
                 {isWorking ? "Working…" : "Generate & Verify"}
               </Button>
@@ -667,7 +692,7 @@ export default function CognitiveInsightLanding() {
               Join as a design partner, pilot participant, or standards collaborator.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button onClick={handlePilot}>
+              <Button onClick={() => setShowPilotModal(true)}>
                 <Handshake className="w-4 h-4" /> Request Pilot
               </Button>
               <Button variant="secondary" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -690,6 +715,31 @@ export default function CognitiveInsightLanding() {
           </div>
         </div>
       </footer>
+      {showPilotModal && (
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-in fade-in-0">
+          <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-white/10 p-6 animate-in zoom-in-95">
+            <h4 className="text-xl font-semibold text-white">Request a Pilot / Demo</h4>
+            <p className="text-indigo-200/80 text-sm mt-1">
+              Tell us a bit about your use case. We’ll email you a booking link right away.
+            </p>
+            <form className="mt-4 space-y-3" onSubmit={submitPilot}>
+              <input name="name" required placeholder="Name" className="w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              <input name="email" type="email" required placeholder="Work Email" className="w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              <input name="orgRole" placeholder="Organization & Role" className="w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              <input name="preferredTime" placeholder="Preferred time window (e.g., Tue 1–4pm CT)" className="w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              <textarea name="notes" rows={3} placeholder="What do you want to see? (e.g., model lifecycle proof, privacy constraints, regulator view)"
+                className="w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              <div className="flex items-center gap-3 pt-2">
+                <Button type="submit" disabled={busy}>
+                  {busy ? "Submitting…" : "Send & Get Calendar Link"}
+                </Button>
+                <Button variant="secondary" onClick={() => setShowPilotModal(false)} type="button">Cancel</Button>
+              </div>
+              <p className="text-xs text-indigo-300/80">We’ll never share your info. Patent-pending; demo is simulated.</p>
+            </form>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
