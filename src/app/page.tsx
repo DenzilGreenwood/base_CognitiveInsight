@@ -98,10 +98,58 @@ export default function CognitiveInsightLanding() {
   const [dataset, setDataset] = useState(300);
   const [auditRatio, setAuditRatio] = useState(10);
   
-  // constants & state
-  const STORAGE_SAVINGS = 0.90;
+  // Constants
+  const STORAGE_SAVINGS = 0.90;          // ~constant receipts-vs-payload savings
+  const CAPSULE_SIZE_KB = 16;            // avg per-capsule store size (sim)
+
+  // New interactive controls
+  const [epochs, setEpochs] = useState(10);
+  const [stepsPerEpoch, setStepsPerEpoch] = useState(500);
+  const [evalRuns, setEvalRuns] = useState(10);
+  const [testInferences, setTestInferences] = useState(5000);
+  const [prodInferences, setProdInferences] = useState(100000);
   const [cacheWarm, setCacheWarm] = useState(true);
   const [persistExpanded, setPersistExpanded] = useState(false);
+
+  // Derived event counts
+  const totalEvents = useMemo(() => {
+    const dataEvents = 3;                          // ingest, preprocess, split
+    const deploymentEvents = 3;                    // package, deploy, promote
+    const trainingEvents = (epochs * stepsPerEpoch) + epochs; // steps + per-epoch checkpoints
+    const evaluationEvents = evalRuns;             // validations / eval jobs
+    return dataEvents + deploymentEvents + trainingEvents + evaluationEvents
+          + testInferences + prodInferences;
+  }, [epochs, stepsPerEpoch, evalRuns, testInferences, prodInferences]);
+
+  const capsules = useMemo(() => {
+    return Math.max(1, Math.ceil(totalEvents * (auditRatio / 100)));
+  }, [totalEvents, auditRatio]);
+
+  const capsuleOverheadGB = useMemo(() => {
+    return (capsules * CAPSULE_SIZE_KB) / (1024 * 1024); // KB -> GB
+  }, [capsules]);
+
+  const persistentFootprintGB = useMemo(() => {
+    // receipts footprint = constant savings + small capsule overhead
+    return (dataset * (1 - STORAGE_SAVINGS)) + capsuleOverheadGB;
+  }, [dataset, capsuleOverheadGB]);
+
+  const estimatedRetrievalMs = useMemo(() => {
+    // Retrieval scales gently with proof depth ~ log2(capsules) and cache mode
+    const depthPenalty = Math.log2(Math.max(1, capsules));
+    const baseWarm = 18 + 1.5 * depthPenalty;
+    const mult = cacheWarm ? 1 : 3.2;  // cold cache slower
+    return Math.round(baseWarm * mult);
+  }, [capsules, cacheWarm]);
+
+  // Temporary workspace (only if materializing artifacts); simple upper bound:
+  const tempWorkspaceGB = useMemo(() => {
+    if (!persistExpanded) return 0;
+    // e.g., up to 10% of dataset or a fraction proportional to audit ratio
+    const byRatio = dataset * Math.min(0.10, (auditRatio / 100) * 0.5);
+    return Math.round(byRatio);
+  }, [dataset, auditRatio, persistExpanded]);
+
   const [isWorking, setIsWorking] = useState(false);
   const [simResult, setSimResult] = useState<null | {
     capsules: number;
@@ -110,7 +158,6 @@ export default function CognitiveInsightLanding() {
     verified: boolean;
     proofSample?: { leaf: string; path: string[] };
   }>(null);
-  const TEMP_WORKSPACE_ENABLED = true;
   const [showPilotModal, setShowPilotModal] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -225,13 +272,6 @@ export default function CognitiveInsightLanding() {
   const handlePilot = () => {
     setShowPilotModal(true);
   };
-
-  const estimatedRetrievalMs = useMemo(() => {
-    // playful heuristic: lower latency with higher audit ratio up to a point (simulated)
-    const base = 45; // ms
-    const factor = Math.max(1, 100 / (auditRatio + 20));
-    return Math.round(base * factor);
-  }, [auditRatio]);
 
   return (
     <main className="min-h-screen w-full text-white bg-gradient-to-b from-indigo-900 via-slate-900 to-slate-950 selection:bg-indigo-600/40 selection:text-white">
@@ -537,6 +577,47 @@ export default function CognitiveInsightLanding() {
               </div>
             </div>
 
+            <div className="grid sm:grid-cols-3 gap-6 mt-6">
+              <div>
+                <label className="text-sm text-indigo-200" htmlFor="epochs">Epochs</label>
+                <input id="epochs" type="range" min={1} max={50} value={epochs}
+                  onChange={(e) => setEpochs(parseInt(e.target.value))}
+                  className="w-full accent-indigo-500" />
+                <p className="text-indigo-100 mt-1">{epochs}</p>
+              </div>
+              <div>
+                <label className="text-sm text-indigo-200" htmlFor="steps">Steps per Epoch</label>
+                <input id="steps" type="range" min={10} max={5000} step={10} value={stepsPerEpoch}
+                  onChange={(e) => setStepsPerEpoch(parseInt(e.target.value))}
+                  className="w-full accent-indigo-500" />
+                <p className="text-indigo-100 mt-1">{stepsPerEpoch.toLocaleString()}</p>
+              </div>
+              <div>
+                <label className="text-sm text-indigo-200" htmlFor="evalRuns">Evaluation Runs</label>
+                <input id="evalRuns" type="range" min={0} max={200} value={evalRuns}
+                  onChange={(e) => setEvalRuns(parseInt(e.target.value))}
+                  className="w-full accent-indigo-500" />
+                <p className="text-indigo-100 mt-1">{evalRuns}</p>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6 mt-6">
+              <div>
+                <label className="text-sm text-indigo-200" htmlFor="testInfs">Test Inferences</label>
+                <input id="testInfs" type="range" min={0} max={200000} step={100} value={testInferences}
+                  onChange={(e) => setTestInferences(parseInt(e.target.value))}
+                  className="w-full accent-indigo-500" />
+                <p className="text-indigo-100 mt-1">{testInferences.toLocaleString()}</p>
+              </div>
+              <div>
+                <label className="text-sm text-indigo-200" htmlFor="prodInfs">Production Inferences</label>
+                <input id="prodInfs" type="range" min={0} max={10000000} step={1000} value={prodInferences}
+                  onChange={(e) => setProdInferences(parseInt(e.target.value))}
+                  className="w-full accent-indigo-500" />
+                <p className="text-indigo-100 mt-1">{prodInferences.toLocaleString()}</p>
+              </div>
+            </div>
+
             {/* Derived metrics */}
             <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card>
@@ -546,27 +627,27 @@ export default function CognitiveInsightLanding() {
               <Card>
                 <p className="text-sm text-indigo-200/90">Persistent Audit Footprint</p>
                 <p className="text-2xl font-bold">
-                  {(dataset * (1 - STORAGE_SAVINGS)).toLocaleString()} GB
+                  {persistentFootprintGB.toLocaleString(undefined, { maximumFractionDigits: 2 })} GB
                 </p>
                 <p className="text-xs text-indigo-300/80">
-                  ≈ {formatPercent(STORAGE_SAVINGS * 100)} reduction (capsules only)
+                  ≈ {Math.round(STORAGE_SAVINGS * 100)}% reduction (capsules only) + small receipt overhead
                 </p>
               </Card>
               <Card>
                 <p className="text-sm text-indigo-200/90">Retrieval Time</p>
                 <p className="text-2xl font-bold">
-                  ≈ {cacheWarm ? estimatedRetrievalMs : Math.round(estimatedRetrievalMs * 3)} ms
+                  ≈ {estimatedRetrievalMs} ms
                 </p>
-                <p className="text-xs text-indigo-300/80">
-                  Warm vs cold cache, simulated
-                </p>
+                <p className="text-xs text-indigo-300/80">Scales with proof depth (log₂ capsules) & cache</p>
               </Card>
               <Card>
                 <p className="text-sm text-indigo-200/90">Capsules Generated*</p>
                 <p className="text-2xl font-bold">
-                  {Math.round(auditRatio * 125).toLocaleString()}
+                  {capsules.toLocaleString()}
                 </p>
-                <p className="text-xs text-indigo-300/80">*Illustrative count</p>
+                <p className="text-xs text-indigo-300/80">
+                  *Dynamic — proportional to captured events across data, training, eval, and inference
+                </p>
               </Card>
             </div>
 
@@ -574,12 +655,10 @@ export default function CognitiveInsightLanding() {
               <Card>
                 <p className="text-sm text-indigo-200/90">Temporary Audit Workspace</p>
                 <p className="text-2xl font-bold">
-                  {TEMP_WORKSPACE_ENABLED
-                    ? Math.round(dataset * Math.min(0.1, auditRatio / 100)).toLocaleString() + " GB"
-                    : "0 GB"}
+                  {tempWorkspaceGB.toLocaleString()} GB
                 </p>
                 <p className="text-xs text-indigo-300/80">
-                  Only used if artifacts are materialized during verification; not persisted.
+                  Only used when artifacts are materialized; not persisted
                 </p>
               </Card>
               <Card>
@@ -589,6 +668,7 @@ export default function CognitiveInsightLanding() {
                     type="checkbox"
                     aria-label="Persist expanded evidence"
                     className="h-5 w-5 accent-indigo-500"
+                    checked={persistExpanded}
                     onChange={(e) => setPersistExpanded(e.target.checked)}
                   />
                 </div>
@@ -599,7 +679,8 @@ export default function CognitiveInsightLanding() {
             </div>
 
             <p className="text-xs text-indigo-300/80 mt-3">
-              No real data processed in this demo. Patent-pending; cryptographic implementations withheld.
+              Capsule counts are computed from lifecycle activity (data, training, evaluation, inference) and your audit ratio,
+              so they change as you adjust parameters. Results are simulated; cryptographic details are proprietary.
             </p>
 
             <div className="mt-6 flex gap-3">
@@ -752,6 +833,3 @@ export default function CognitiveInsightLanding() {
     </main>
   );
 }
-
-
-    
