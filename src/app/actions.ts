@@ -1,60 +1,61 @@
-'use server';
+"use server";
 
-import {
-  generateCryptographicCommitment,
-  type GenerateCryptographicCommitmentInput,
-  type GenerateCryptographicCommitmentOutput,
-} from '@/ai/flows/generate-cryptographic-commitment';
-import {
-  verifyCryptographicCommitment,
-  type VerifyCryptographicCommitmentInput,
-  type VerifyCryptographicCommitmentOutput,
-} from '@/ai/flows/verify-cryptographic-commitment';
-import { z } from 'zod';
+import { z } from "zod";
+import { db } from "@/lib/firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
 
-const generateSchema = z.object({
-  dataDescription: z.string().min(10, 'Please provide a more detailed description.'),
-  sensitiveData: z.string().optional(),
-  commitmentDetails: z.string().min(5, 'Please provide more commitment details.'),
+const LeadSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  company: z.string().optional(),
+  notes: z.string().optional(),
+  source: z.string().optional(), // e.g., "landing", "whitepaper"
 });
 
-export async function generateCommitmentAction(
-  input: GenerateCryptographicCommitmentInput
-): Promise<{ success: boolean; data?: GenerateCryptographicCommitmentOutput; error?: string }> {
-  const parsed = generateSchema.safeParse(input);
-  if (!parsed.success) {
-    return { success: false, error: parsed.error.errors.map((e) => e.message).join(', ') };
-  }
+export type LeadInput = z.infer<typeof LeadSchema>;
 
-  try {
-    const result = await generateCryptographicCommitment(parsed.data);
-    return { success: true, data: result };
-  } catch (error) {
-    console.error(error);
-    return { success: false, error: 'Failed to generate commitment.' };
+export async function createLead(input: LeadInput) {
+  const parsed = LeadSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: "Invalid input", issues: parsed.error.flatten() };
   }
+  const data = {
+    ...parsed.data,
+    createdAt: Timestamp.now(),
+    status: "new" as const,
+  };
+  await db.collection("leads").add(data);
+  // Optionally trigger a CF onCreate email; see functions/ below
+  return { ok: true };
 }
 
-const verifySchema = z.object({
-  commitment: z.string().min(1, 'Commitment is required.'),
-  dataHash: z.string().min(1, 'Data hash is required.'),
-  verificationKey: z.string().min(1, 'Verification key is required.'),
-  complianceStandard: z.string().min(1, 'Compliance standard is required.'),
-});
+/** Simulated demo pipeline for Generate → Verify with capsule math */
+export async function runDemoStep(step: string, payload?: unknown) {
+  // In a real setup, accept params and compute outputs or call your backend
+  await new Promise((r) => setTimeout(r, 350)); // simulate latency
 
-export async function verifyCommitmentAction(
-  input: VerifyCryptographicCommitmentInput
-): Promise<{ success: boolean; data?: VerifyCryptographicCommitmentOutput; error?: string }> {
-  const parsed = verifySchema.safeParse(input);
-  if (!parsed.success) {
-    return { success: false, error: parsed.error.errors.map((e) => e.message).join(', ') };
-  }
-  
-  try {
-    const result = await verifyCryptographicCommitment(parsed.data);
-    return { success: true, data: result };
-  } catch (error) {
-    console.error(error);
-    return { success: false, error: 'Failed to verify commitment.' };
+  switch (step) {
+    case "generate":
+      return { ok: true, next: "select", info: { datasetGb: 10000, auditRatio: 0.05 } };
+    case "select":
+      return { ok: true, next: "infer", info: { selection: "stratified-10%" } };
+    case "infer":
+      return { ok: true, next: "capsule", info: { inferences: 5000 } };
+    case "capsule": {
+      // toy math consistent with your copy; tune freely
+      const { datasetGb = 10000, auditRatio = 0.05 } = (payload as any) ?? {};
+      const baseEvents = Math.round(datasetGb * 0.0125); // arbitrary event density
+      const audited = Math.max(1, Math.round(baseEvents * auditRatio));
+      const capsules = Math.max(1, Math.round(audited / 2)); // illustration
+      return {
+        ok: true,
+        next: "verify",
+        info: { capsules, workspaceGb: 500, retrievalMs: 180, reductionPct: 90 },
+      };
+    }
+    case "verify":
+      return { ok: true, done: true, info: { verified: true, ms: 30 } };
+    default:
+      return { ok: false, error: "Unknown step" };
   }
 }
