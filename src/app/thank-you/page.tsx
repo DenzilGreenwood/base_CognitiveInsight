@@ -16,7 +16,7 @@ export default function ThankYouPage() {
           </Link>
         </div>
         <p className="mt-6 text-sm text-indigo-300/80">
-          If you don&apos;t receive an email within a few minutes, please check your spam folder or contact us directly.
+          If you don't receive an email within a few minutes, please check your spam folder or contact us directly.
         </p>
       </div>
     </main>
