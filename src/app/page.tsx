@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -25,9 +25,9 @@ export default function Home() {
   
   const [capsulesGenerated] = useState(12485);
 
-  const handleMetricsChange = (newMetrics: SimulationMetrics) => {
+  const handleMetricsChange = useCallback((newMetrics: SimulationMetrics) => {
     setMetrics(newMetrics);
-  };
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
