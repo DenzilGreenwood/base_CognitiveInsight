@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -10,6 +10,7 @@ interface SimulationMetrics {
   storageSavings: number;
   retrievalTime: number;
   datasetSize: number;
+  auditRatio: number;
 }
 
 interface SimulationEngineProps {
@@ -20,14 +21,18 @@ export function SimulationEngine({ onMetricsChange }: SimulationEngineProps) {
   const [datasetSize, setDatasetSize] = useState(500); // in GB
   const [auditRatio, setAuditRatio] = useState(10); // in %
 
+  // Memoize the callback to prevent unnecessary re-renders of child components.
+  const memoizedOnMetricsChange = useCallback(onMetricsChange, [onMetricsChange]);
+
   useEffect(() => {
     const newMetrics = {
       storageSavings: 100 - auditRatio,
       retrievalTime: (datasetSize * auditRatio) / 100 * 0.5,
       datasetSize,
+      auditRatio,
     };
-    onMetricsChange(newMetrics);
-  }, [datasetSize, auditRatio, onMetricsChange]);
+    memoizedOnMetricsChange(newMetrics);
+  }, [datasetSize, auditRatio, memoizedOnMetricsChange]);
   
   const storageSavings = 100 - auditRatio;
   const retrievalTime = (datasetSize * auditRatio) / 100 * 0.5;
@@ -83,7 +88,7 @@ export function SimulationEngine({ onMetricsChange }: SimulationEngineProps) {
                     <CardTitle className="text-sm font-medium text-muted-foreground flex justify-center items-center gap-2"><Save size={16} /> Storage Savings</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-2xl font-bold text-green-400">{storageSavings.toFixed(1)}%</p>
+                    <p className="text-2xl font-bold text-green-400">{storageSavings.toFixed(0)}%</p>
                 </CardContent>
             </Card>
             <Card>

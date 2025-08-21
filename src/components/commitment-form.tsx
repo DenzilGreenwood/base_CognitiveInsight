@@ -125,8 +125,8 @@ export function CommitmentForm() {
                 {generateForm.formState.errors.dataDescription && <p className="text-sm text-destructive">{generateForm.formState.errors.dataDescription.message}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="sensitiveData">Sensitive Data (Optional)</Label>
-                <Input id="sensitiveData" placeholder="Enter sensitive data here..." {...generateForm.register('sensitiveData')} />
+                <Label htmlFor="sensitiveData">Simulated Data (Optional)</Label>
+                <Input id="sensitiveData" placeholder="Enter synthetic data to include in the simulation..." {...generateForm.register('sensitiveData')} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="commitmentDetails">Commitment Details</Label>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart, FileText, Bot, Shield, Save, Clock, Package } from "lucide-react";
+import { BarChart, FileText, Bot, Shield, Save, Clock, Package, Zap } from "lucide-react";
 import { CommitmentForm } from "@/components/commitment-form";
 import { SimulationEngine } from "@/components/simulation-engine";
 import { Logo } from "@/components/icons";
@@ -14,6 +14,7 @@ interface SimulationMetrics {
   storageSavings: number;
   retrievalTime: number;
   datasetSize: number;
+  auditRatio: number;
 }
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
     storageSavings: 90,
     retrievalTime: 25,
     datasetSize: 500,
+    auditRatio: 10,
   });
   
   const [capsulesGenerated] = useState(12485);
@@ -43,10 +45,10 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32 text-center">
           <div className="container px-4 md:px-6">
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-              Verifiable AI Assurance
+              Turn Confusion Into Cryptographic Clarity
             </h1>
             <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl mt-4">
-              Build trust and transparency in your AI systems with our privacy-preserving cryptographic commitment platform.
+              Build trust and transparency in AI with privacy-preserving cryptographic receipts.
             </p>
             <div className="mt-6">
               <Button size="lg">Request a Demo</Button>
@@ -58,7 +60,7 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32 bg-secondary">
             <div className="container px-4 md:px-6">
                  <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Key Performance Indicators</h2>
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Backed by 5+ years in compliance and current research in AI governance.</h2>
                     <p className="text-muted-foreground mt-2">Real-time metrics from our simulation engine.</p>
                 </div>
                 <div className="grid gap-6 md:grid-cols-3">
@@ -68,23 +70,23 @@ export default function Home() {
                             <Save className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-4xl font-bold text-green-400">{metrics.storageSavings.toFixed(1)}%</div>
-                            <p className="text-xs text-muted-foreground">vs. storing the full {metrics.datasetSize} GB dataset</p>
+                            <div className="text-4xl font-bold text-green-400">{metrics.storageSavings.toFixed(0)}% reduction</div>
+                            <p className="text-xs text-muted-foreground">{metrics.datasetSize} GB shrinks to {(metrics.datasetSize * (metrics.auditRatio / 100)).toFixed(0)} GB</p>
                         </CardContent>
                     </Card>
                      <Card>
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Retrieval Time</CardTitle>
+                            <CardTitle className="text-sm font-medium">Retrieval Speed</CardTitle>
                             <Clock className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-4xl font-bold">{metrics.retrievalTime.toFixed(1)} ms</div>
-                            <p className="text-xs text-muted-foreground">Average time to retrieve audited data capsule</p>
+                            <p className="text-xs text-muted-foreground">Instant verification at scale</p>
                         </CardContent>
                     </Card>
                      <Card>
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium">Capsules Generated</CardTitle>
+                            <CardTitle className="text-sm font-medium">Proofs Generated</CardTitle>
                             <Package className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
@@ -100,9 +102,9 @@ export default function Home() {
         <section id="demo" className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Interactive Demo</h2>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl flex items-center justify-center gap-2"><Zap className="text-primary"/> Try It Yourself</h2>
               <p className="max-w-[700px] mx-auto text-muted-foreground md:text-lg mt-2">
-                Experience the power of CognitiveInsight firsthand. Simulate audit scenarios and generate your own cryptographic commitments.
+                Generate and verify simulated audit commitments. No real data required.
               </p>
             </div>
             <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
@@ -136,33 +138,30 @@ export default function Home() {
               <TabsContent value="regulators">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Streamlined Compliance</CardTitle>
+                    <CardTitle>Independent Verification, Standard-Ready Audit Trails</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-muted-foreground">
-                    <p>Gain unprecedented visibility into AI development lifecycles without compromising data privacy. Our verifiable receipts offer a clear, immutable audit trail, making it easier to enforce standards like the EU AI Act.</p>
-                    <p>Drastically reduce the time and resources spent on manual audits and data requests.</p>
+                    <p>Gain transparent, immutable audit trails aligned with standards like the EU AI Act without compromising data privacy. Our verifiable receipts offer a clear audit trail, making it easier to enforce standards.</p>
                   </CardContent>
                 </Card>
               </TabsContent>
               <TabsContent value="auditors">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Efficient & Accurate Audits</CardTitle>
+                    <CardTitle>Reduce Manual Workload, Cryptographic Confidence</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-muted-foreground">
-                    <p>Conduct faster, more reliable audits with cryptographic proof of integrity. Verify model training events, data provenance, and configuration changes instantly, without needing access to raw, sensitive datasets.</p>
-                    <p>Focus on high-level assurance and risk assessment, backed by tamper-evident data you can trust.</p>
+                    <p>Conduct faster reviews with verifiable cryptographic anchors. Verify model training events, data provenance, and configuration changes instantly, without needing access to raw, sensitive datasets.</p>
                   </CardContent>
                 </Card>
               </TabsContent>
               <TabsContent value="companies">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Accelerate Innovation with Trust</CardTitle>
+                    <CardTitle>Compliance Without Friction, Protect IP & Privacy</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-muted-foreground">
-                    <p>Proactively demonstrate compliance and build trust with customers and regulators. Our platform helps you maintain a verifiable record of your AI governance practices, reducing liability and enhancing your brand reputation.</p>
-                    <p>Securely collaborate with partners and auditors by sharing verifiable proofs instead of sensitive IP or data.</p>
+                    <p>Proactively demonstrate compliance and build trust. Our platform helps you maintain a verifiable record of your AI governance practices, reducing liability and enhancing your brand reputation, while protecting data privacy and IP.</p>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -176,7 +175,7 @@ export default function Home() {
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Dive Deeper</h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Request access to our exclusive white paper for a detailed look at our design, standard alignments, and pilot program options.
+                Request access to our exclusive white paper for pilot program details and standards mapping.
               </p>
             </div>
             <div className="mx-auto w-full max-w-sm space-y-2">
@@ -184,7 +183,7 @@ export default function Home() {
                 <Input type="email" placeholder="Enter your email" className="max-w-lg flex-1" />
                 <Button type="submit">
                   <FileText className="mr-2 h-4 w-4" />
-                  Request Access
+                  Request White Paper
                 </Button>
               </form>
             </div>
@@ -193,7 +192,10 @@ export default function Home() {
       </main>
 
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-muted-foreground">&copy; 2024 CognitiveInsight. All rights reserved.</p>
+        <div className="text-xs text-muted-foreground">
+            <p>&copy; 2024 CognitiveInsight. Patent Pending. All rights reserved.</p>
+            <p>For demonstration purposes only. Cryptographic implementations are proprietary.</p>
+        </div>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <a className="text-xs hover:underline underline-offset-4" href="#">
             Terms of Service
