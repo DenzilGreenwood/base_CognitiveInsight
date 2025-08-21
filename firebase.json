@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "out",
+    "rewrites": [
+      { "source": "/api/leads", "function": "leads" },
+      { "source": "**", "destination": "/index.html" }
+    ]
+  },
+  "functions": { "runtime": "nodejs20", "source": "functions" }
+}

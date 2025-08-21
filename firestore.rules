@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // No public reads of leads by default
+    match /leads/{doc} {
+      allow read: if false;              // change to role-gated if you add an admin portal
+      allow write: if false;             // block direct client writes
+    }
+  }
+}

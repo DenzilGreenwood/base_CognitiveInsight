@@ -41,7 +41,8 @@ const Button: React.FC<{
   href?: string;
   variant?: 'primary' | 'secondary' | 'ghost';
   className?: string;
-}> = ({ children, onClick, as = 'button', href, variant = 'primary', className = '' }) => {
+  type?: 'button' | 'submit' | 'reset';
+}> = ({ children, onClick, as = 'button', href, variant = 'primary', className = '', type = 'button' }) => {
   const base =
     'inline-flex items-center gap-2 rounded-2xl px-5 py-3 font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2';
   const styles: Record<string, string> = {
@@ -60,7 +61,7 @@ const Button: React.FC<{
     );
   }
   return (
-    <button className={`${base} ${styles[variant]} ${className}`} onClick={onClick}>
+    <button type={type} className={`${base} ${styles[variant]} ${className}`} onClick={onClick}>
       {children}
     </button>
   );
@@ -118,6 +119,33 @@ export default function CognitiveInsightLanding() {
     );
   }
 
+  async function submitWhitepaperLead(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget as HTMLFormElement;
+    const formData = new FormData(form);
+    const payload = {
+      name: String(formData.get("name") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      orgRole: String(formData.get("orgRole") || "").trim(),
+      type: "whitepaper"
+    };
+  
+    const r = await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  
+    const data = await r.json();
+    if (data.ok) {
+      // show success UI
+      alert("Thanks! We’ll email the white paper shortly.");
+      form.reset();
+    } else {
+      alert("There was a problem submitting your request. Please try again.");
+    }
+  }
+
   const handlePilot = () => {
     submitLead('pilot');
   };
@@ -153,7 +181,7 @@ export default function CognitiveInsightLanding() {
               sensitive models or data.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-              <Button onClick={handleWhitePaper}>
+              <Button onClick={() => document.querySelector('#whitepaper-form')?.scrollIntoView({ behavior: 'smooth' })}>
                 <FileText className="w-4 h-4" /> Request White Paper
               </Button>
               <Button variant="secondary" onClick={handleDemo}>
@@ -537,7 +565,7 @@ export default function CognitiveInsightLanding() {
       </section>
 
       {/* WHITE PAPER ACCESS */}
-      <section className="container mx-auto px-6 py-16 md:py-20 max-w-4xl">
+      <section id="whitepaper-form" className="container mx-auto px-6 py-16 md:py-20 max-w-4xl">
         <SectionHeader
           kicker="White Paper"
           title="Deeper Dive Without Giving Away the IP"
@@ -546,27 +574,22 @@ export default function CognitiveInsightLanding() {
         <Card className="mt-8">
           <form
             className="grid sm:grid-cols-2 gap-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert(
-                'Thanks! We’ll email the white paper after reviewing your request. In production, wire this form to your CRM.'
-              );
-            }}
+            onSubmit={submitWhitepaperLead}
           >
             <div>
               <label className="block text-sm text-indigo-200">Name</label>
-              <input required className="mt-1 w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Jane Doe" />
+              <input name="name" required className="mt-1 w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Jane Doe" />
             </div>
             <div>
               <label className="block text-sm text-indigo-200">Email</label>
-              <input type="email" required className="mt-1 w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="jane@org.com" />
+              <input name="email" type="email" required className="mt-1 w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="jane@org.com" />
             </div>
             <div className="sm:col-span-2">
               <label className="block text-sm text-indigo-200">Organization & Role</label>
-              <input className="mt-1 w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Regulator, Auditor, or AI Company" />
+              <input name="orgRole" className="mt-1 w-full rounded-xl bg-white/10 px-4 py-2.5 text-white placeholder-indigo-200/60 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Regulator, Auditor, or AI Company" />
             </div>
             <div className="sm:col-span-2 flex items-center gap-3 pt-2">
-              <Button>
+              <Button type="submit">
                 <FileText className="w-4 h-4" /> Request White Paper
               </Button>
               <p className="text-sm text-indigo-300/80">Patent-pending. Cryptographic implementations withheld.</p>
@@ -612,3 +635,5 @@ export default function CognitiveInsightLanding() {
     </main>
   );
 }
+
+    
