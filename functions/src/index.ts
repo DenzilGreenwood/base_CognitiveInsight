@@ -159,3 +159,5 @@ function escapeHtml(s: string) {
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string)
   );
 }
+
+export { simGenerate, simVerify } from "./sim";

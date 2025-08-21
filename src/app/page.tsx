@@ -96,17 +96,73 @@ export default function CognitiveInsightLanding() {
   const [dataset, setDataset] = useState(300);
   const [auditRatio, setAuditRatio] = useState(10);
   
-  const STORAGE_SAVINGS = 0.90; // stable, near-constant savings for commitments vs payloads
+  // constants & state
+  const STORAGE_SAVINGS = 0.90;
   const [cacheWarm, setCacheWarm] = useState(true);
   const [persistExpanded, setPersistExpanded] = useState(false);
+  const [isWorking, setIsWorking] = useState(false);
+  const [simResult, setSimResult] = useState<null | {
+    capsules: number;
+    anchorRoot: string;
+    retrievalMs: number;
+    verified: boolean;
+    proofSample?: { leaf: string; path: string[] };
+  }>(null);
+
   const TEMP_WORKSPACE_ENABLED = true;
 
-  const handleDemo = () => {
-    alert(
-      'Launching Demo Simulation... (In production, route to /demo or open the interactive simulator.)'
-    );
-  };
-  
+  // helper to POST JSON
+  async function postJSON<T>(url: string, body: any): Promise<T> {
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!r.ok) throw new Error(await r.text());
+    return r.json();
+  }
+
+  async function handleGenerateAndVerify() {
+    try {
+      setIsWorking(true);
+      setSimResult(null);
+
+      // 1) GENERATE (simulate capsules + anchor)
+      const gen = await postJSON<{
+        capsules: number;
+        anchorRoot: string;
+        proofSample: { leaf: string; path: string[] };
+      }>("/api/sim/generate", {
+        datasetGB: dataset,
+        auditRatio,
+        cacheWarm,
+        persistExpanded,
+      });
+
+      // 2) VERIFY (check sample proof against anchor)
+      const v = await postJSON<{ verified: boolean; retrievalMs: number }>(
+        "/api/sim/verify",
+        {
+          anchorRoot: gen.anchorRoot,
+          proofSample: gen.proofSample,
+          cacheWarm,
+        }
+      );
+
+      setSimResult({
+        capsules: gen.capsules,
+        anchorRoot: gen.anchorRoot,
+        retrievalMs: v.retrievalMs,
+        verified: v.verified,
+        proofSample: gen.proofSample,
+      });
+    } catch (e) {
+      alert("Simulation error: " + (e as Error).message);
+    } finally {
+      setIsWorking(false);
+    }
+  }
+
   const submitLead = (type: string) => {
      alert(
       `Thanks for your interest in a ${type}! We'll follow up to schedule a scoping conversation.`
@@ -178,7 +234,7 @@ export default function CognitiveInsightLanding() {
               <Button onClick={handlePilot}>
                 <Handshake className="w-4 h-4" /> Request Pilot
               </Button>
-              <Button variant="secondary" onClick={handleDemo}>
+              <Button variant="secondary" onClick={() => document.querySelector('#demo')?.scrollIntoView({ behavior: 'smooth' })}>
                 <Activity className="w-4 h-4" /> Explore Demo
               </Button>
               <Button variant="ghost" onClick={() => document.querySelector('#whitepaper-form')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -398,7 +454,7 @@ export default function CognitiveInsightLanding() {
       </section>
 
       {/* DEMO (Simulated) */}
-      <section className="container mx-auto px-6 py-16 md:py-20 max-w-6xl">
+      <section id="demo" className="container mx-auto px-6 py-16 md:py-20 max-w-6xl">
         <SectionHeader
           kicker="Demo"
           title="Interactive Simulation (Demonstration Only)"
@@ -521,13 +577,23 @@ export default function CognitiveInsightLanding() {
             </p>
 
             <div className="mt-6 flex gap-3">
-              <Button onClick={handleDemo}>
-                <Activity className="w-4 h-4" /> Generate & Verify
+              <Button onClick={handleGenerateAndVerify} className={isWorking ? "opacity-60 cursor-not-allowed" : ""}>
+                <Activity className="w-4 h-4" />
+                {isWorking ? "Working…" : "Generate & Verify"}
               </Button>
               <Button variant="secondary" onClick={() => submitLead("pilot")}>
                 <ShieldCheck className="w-4 h-4" /> Run a Real Pilot
               </Button>
             </div>
+            {simResult && (
+              <div className="mt-4 text-sm text-indigo-100 space-y-1">
+                <div>Anchor Root: <span className="font-mono break-all">{simResult.anchorRoot}</span></div>
+                <div>Verification: <span className={simResult.verified ? "text-emerald-300" : "text-rose-300"}>
+                  {simResult.verified ? "Verified" : "Mismatch"}
+                </span></div>
+                <div>Retrieval Time (sim): ~{simResult.retrievalMs} ms</div>
+              </div>
+            )}
           </Card>
 
           <Card>

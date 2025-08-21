@@ -3,6 +3,8 @@
     "public": "out",
     "rewrites": [
       { "source": "/api/leads", "function": "leads" },
+      { "source": "/api/sim/generate", "function": "simGenerate" },
+      { "source": "/api/sim/verify", "function": "simVerify" },
       { "source": "**", "destination": "/index.html" }
     ]
   },
