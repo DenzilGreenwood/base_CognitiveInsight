@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -20,16 +20,18 @@ export function SimulationEngine({ onMetricsChange }: SimulationEngineProps) {
   const [datasetSize, setDatasetSize] = useState(500); // in GB
   const [auditRatio, setAuditRatio] = useState(10); // in %
 
+  const memoizedOnMetricsChange = useCallback(onMetricsChange, [onMetricsChange]);
+
   useEffect(() => {
     const storageSavings = 100 - auditRatio;
     const retrievalTime = (datasetSize * auditRatio) / 100 * 0.5; // 0.5ms per GB of audited data
 
-    onMetricsChange({
+    memoizedOnMetricsChange({
       storageSavings: parseFloat(storageSavings.toFixed(1)),
       retrievalTime: parseFloat(retrievalTime.toFixed(1)),
       datasetSize,
     });
-  }, [datasetSize, auditRatio, onMetricsChange]);
+  }, [datasetSize, auditRatio, memoizedOnMetricsChange]);
   
   const storageSavings = 100 - auditRatio;
   const retrievalTime = (datasetSize * auditRatio) / 100 * 0.5;
