@@ -1,10 +1,11 @@
 import * as React from "react";
-import { useMemo, useState } from "react";
-import { Activity, Database, CheckCircle2, Receipt, ShieldCheck, Loader2 } from "lucide-react";
+import { useMemo, useState, useEffect } from "react";
+import { Activity, Database, CheckCircle2, Receipt, ShieldCheck, Loader2, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "./SectionHeader";
+import { useAuth } from "@/contexts/AuthContext";
 import type { SimulationState, DemoHandlers } from "./types";
 
 /**
@@ -39,6 +40,9 @@ const DemoSection: React.FC<DemoSectionProps> = ({
   // Use props for controlled state
   const { dataset: datasetGB, auditRatio } = simulation;
   
+  // Firebase Auth
+  const { user, loading: authLoading, signInAnonymous, signInDemo, signOut, getIdToken } = useAuth();
+  
   // Local state for demo-specific controls
   const [cacheWarm, setCacheWarm] = useState(true);
   const [persistExpanded, setPersistExpanded] = useState(false);
@@ -49,6 +53,15 @@ const DemoSection: React.FC<DemoSectionProps> = ({
   const [generatedData, setGeneratedData] = useState<any>(null);
   const [verificationResult, setVerificationResult] = useState<any>(null);
   const [currentStep, setCurrentStep] = useState<string | null>(null);
+
+  // Auto sign-in anonymously when component mounts
+  useEffect(() => {
+    console.log('DemoSection useEffect - authLoading:', authLoading, 'user:', user?.uid);
+    if (!authLoading && !user) {
+      console.log('Attempting to sign in anonymously...');
+      signInAnonymous().catch(console.error);
+    }
+  }, [authLoading, user, signInAnonymous]); // Add signInAnonymous back since it's now stable
 
   // --- Lifecycle activity model (illustrative, not revealing internals) ---
   // We simulate event volume from data scale + generic training/eval/inference activity.
@@ -117,21 +130,31 @@ const DemoSection: React.FC<DemoSectionProps> = ({
 
   // CTA handlers for backend integration
   const handleGenerate = async () => {
+    if (!user) {
+      alert('Please wait for authentication...');
+      return;
+    }
+
     setIsGenerating(true);
     setCurrentStep("generate");
     setGeneratedData(null);
     setVerificationResult(null);
     
     try {
-      // Use direct Cloud Function URL for now since local routing isn't working
-      const functionUrl = process.env.NODE_ENV === 'development' 
-        ? 'https://us-central1-cognitiveinsight-j7xwb.cloudfunctions.net/simGenerate'
-        : '/api/sim/generate';
-        
-      const response = await fetch(functionUrl, {
+      console.log('Getting ID token for generate request...');
+      const idToken = await getIdToken();
+      console.log('Received token:', idToken?.substring(0, 20) + '...');
+      
+      if (!idToken) {
+        throw new Error('Failed to get authentication token');
+      }
+
+      console.log('Making request to /api/sim/generate with token');
+      const response = await fetch('/api/sim/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`,
         },
         body: JSON.stringify({
           datasetGB,
@@ -161,6 +184,11 @@ const DemoSection: React.FC<DemoSectionProps> = ({
   };
 
   const handleVerify = async (dataArg?: any) => {
+    if (!user) {
+      alert('Please wait for authentication...');
+      return;
+    }
+
     const payload = dataArg ?? generatedData;
     if (!payload) {
       alert('Please generate capsules first');
@@ -172,15 +200,16 @@ const DemoSection: React.FC<DemoSectionProps> = ({
     setVerificationResult(null);
     
     try {
-      // Use direct Cloud Function URL for now since local routing isn't working
-      const functionUrl = process.env.NODE_ENV === 'development' 
-        ? 'https://us-central1-cognitiveinsight-j7xwb.cloudfunctions.net/simVerify'
-        : '/api/sim/verify';
-        
-      const response = await fetch(functionUrl, {
+      const idToken = await getIdToken();
+      if (!idToken) {
+        throw new Error('Failed to get authentication token');
+      }
+
+      const response = await fetch('/api/sim/verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken}`,
         },
         body: JSON.stringify({
           anchorRoot: payload.anchorRoot,
@@ -233,6 +262,34 @@ const DemoSection: React.FC<DemoSectionProps> = ({
         title="Interactive Simulation"
         subtitle="Demonstration only. Methods are proprietary; figures are illustrative."
       />
+
+      {/* Authentication Status */}
+      <div className="mt-6 flex items-center justify-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
+        {authLoading ? (
+          <div className="flex items-center gap-2 text-indigo-200">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <span>Initializing authentication...</span>
+          </div>
+        ) : user ? (
+          <div className="flex items-center gap-2 text-green-200">
+            <User className="w-4 h-4" />
+            <span>Authenticated (Demo User)</span>
+            <Button
+              onClick={signOut}
+              variant="ghost"
+              size="sm"
+              className="ml-2 h-6 px-2 text-xs text-indigo-300 hover:text-white"
+            >
+              <LogOut className="w-3 h-3" />
+            </Button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 text-yellow-200">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <span>Signing in...</span>
+          </div>
+        )}
+      </div>
 
       <div className="mt-10 grid lg:grid-cols-3 gap-6">
         {/* LEFT: Controls + Metrics */}
@@ -367,7 +424,7 @@ const DemoSection: React.FC<DemoSectionProps> = ({
             <div className="mt-6 flex flex-wrap gap-3">
               <Button
                 onClick={handleGenerate}
-                disabled={isGenerating || isVerifying}
+                disabled={isGenerating || isVerifying || !user}
                 className="bg-indigo-600 text-white hover:bg-indigo-700 rounded-2xl px-5 py-3"
               >
                 {isGenerating ? (
@@ -383,7 +440,7 @@ const DemoSection: React.FC<DemoSectionProps> = ({
               
               <Button
                 onClick={handleVerify}
-                disabled={!generatedData || isGenerating || isVerifying}
+                disabled={!generatedData || isGenerating || isVerifying || !user}
                 variant="outline"
                 className="bg-white text-indigo-700 hover:bg-indigo-50 border border-indigo-200 rounded-2xl px-5 py-3"
               >
@@ -400,7 +457,7 @@ const DemoSection: React.FC<DemoSectionProps> = ({
               
               <Button
                 onClick={handleGenerateAndVerify}
-                disabled={isGenerating || isVerifying}
+                disabled={isGenerating || isVerifying || !user}
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700 rounded-2xl px-5 py-3"
               >
                 {isGenerating || isVerifying ? (

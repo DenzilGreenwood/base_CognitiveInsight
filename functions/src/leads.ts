@@ -28,6 +28,7 @@ const getFirebaseConfig = () => functions.config();
 export const leads = onRequest(
   {
     cors: true,
+    // Remove invoker setting to use default auth
     secrets: [sendgridApiKey], // included even if not used here (ok)
   },
   async (req, res) => {

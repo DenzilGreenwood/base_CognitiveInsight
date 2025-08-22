@@ -8,10 +8,56 @@
 
 import { onRequest } from "firebase-functions/v2/https";
 import { setGlobalOptions } from "firebase-functions/v2";
+import * as admin from "firebase-admin";
 import crypto from "crypto";
+import * as serviceAccount from "./service-account-key.json";
+
+// Initialize Firebase Admin SDK with service account
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+    projectId: 'cognitiveinsight-j7xwb'
+  });
+}
 
 // Optional: set defaults (pick your region)
 setGlobalOptions({ region: "us-central1" });
+
+// Authentication helper
+async function verifyFirebaseToken(req: any): Promise<admin.auth.DecodedIdToken | null> {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return null;
+    }
+    
+    const token = authHeader.substring(7);
+    
+    // Allow mock token in development
+    if (token === 'mock-development-token') {
+      console.warn('Using mock authentication token for development');
+      return {
+        uid: 'mock-user-id',
+        aud: 'cognitiveinsight-j7xwb',
+        auth_time: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + 3600,
+        firebase: {
+          identities: {},
+          sign_in_provider: 'anonymous'
+        },
+        iat: Math.floor(Date.now() / 1000),
+        iss: 'https://securetoken.google.com/cognitiveinsight-j7xwb',
+        sub: 'mock-user-id'
+      } as admin.auth.DecodedIdToken;
+    }
+    
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    return decodedToken;
+  } catch (error) {
+    console.error('Token verification failed:', error);
+    return null;
+  }
+}
 
 // tiny utility
 const sha256 = (s: string) => crypto.createHash("sha256").update(s).digest("hex");
@@ -46,10 +92,20 @@ function merkleRoot(
 }
 
 export const simGenerate = onRequest(
-  { cors: true }, // v2 handles OPTIONS for you
-  (req, res) => {
+  { 
+    cors: true
+    // Remove invoker setting to use default auth
+  },
+  async (req, res) => {
     if (req.method !== "POST") {
       res.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    // Verify Firebase authentication
+    const decodedToken = await verifyFirebaseToken(req);
+    if (!decodedToken) {
+      res.status(401).json({ error: "Unauthorized" });
       return;
     }
 
@@ -72,10 +128,20 @@ export const simGenerate = onRequest(
 );
 
 export const simVerify = onRequest(
-  { cors: true }, // v2 handles OPTIONS
-  (req, res) => {
+  { 
+    cors: true
+    // Remove invoker setting to use default auth
+  },
+  async (req, res) => {
     if (req.method !== "POST") {
       res.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    // Verify Firebase authentication
+    const decodedToken = await verifyFirebaseToken(req);
+    if (!decodedToken) {
+      res.status(401).json({ error: "Unauthorized" });
       return;
     }
 

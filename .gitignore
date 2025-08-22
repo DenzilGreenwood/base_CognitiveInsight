@@ -101,5 +101,9 @@ firestore-debug.log
 ui-debug.log
 functions/node_modules/
 
+# Firebase service account keys
+**/service-account-key.json
+**/*firebase-adminsdk*.json
+
 # Google Cloud
 .gcloudignore
