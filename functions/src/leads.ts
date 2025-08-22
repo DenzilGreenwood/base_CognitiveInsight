@@ -6,18 +6,19 @@
  *  - `onLeadCreate`: Firestore trigger for new lead events.
  */
 
-
-
 import { onRequest } from "firebase-functions/v2/https";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { defineSecret } from "firebase-functions/params";
-import * as admin from "firebase-admin";
+import { initializeApp, getApps } from "firebase-admin/app";
+import { getFirestore, Timestamp } from "firebase-admin/firestore";
 import * as functions from "firebase-functions";
 import sgMail from "@sendgrid/mail";
 
-if (!admin.apps.length) {
-  admin.initializeApp();
+if (getApps().length === 0) {
+  initializeApp();
 }
+
+const db = getFirestore();
 
 // Secrets and configuration
 const sendgridApiKey = defineSecret("SENDGRID_API");            // set via: firebase functions:secrets:set SENDGRID_API
@@ -51,11 +52,11 @@ export const leads = onRequest(
         company: company ? String(company) : null,
         notes: notes ? String(notes) : null,
         source: source ? String(source) : "api",
-        createdAt: admin.firestore.Timestamp.now(),
+        createdAt: Timestamp.now(),
         status: "new",
       };
 
-      const docRef = await admin.firestore().collection("leads").add(leadData);
+      const docRef = await db.collection("leads").add(leadData);
       res.json({ ok: true, id: docRef.id });
     } catch (err: any) {
       console.error("Error creating lead:", err);

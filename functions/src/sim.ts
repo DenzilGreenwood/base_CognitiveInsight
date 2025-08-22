@@ -8,14 +8,14 @@
 
 import { onRequest } from "firebase-functions/v2/https";
 import { setGlobalOptions } from "firebase-functions/v2";
-import * as admin from "firebase-admin";
+import { initializeApp, getApps } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+import { getAuth, type DecodedIdToken } from "firebase-admin/auth";
 import crypto from "crypto";
-import * as serviceAccount from "./service-account-key.json";
 
-// Initialize Firebase Admin SDK with service account
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+// Initialize Firebase Admin SDK
+if (getApps().length === 0) {
+  initializeApp({
     projectId: 'cognitiveinsight-j7xwb'
   });
 }
@@ -24,7 +24,7 @@ if (!admin.apps.length) {
 setGlobalOptions({ region: "us-central1" });
 
 // Authentication helper
-async function verifyFirebaseToken(req: any): Promise<admin.auth.DecodedIdToken | null> {
+async function verifyFirebaseToken(req: any): Promise<DecodedIdToken | null> {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -48,10 +48,10 @@ async function verifyFirebaseToken(req: any): Promise<admin.auth.DecodedIdToken 
         iat: Math.floor(Date.now() / 1000),
         iss: 'https://securetoken.google.com/cognitiveinsight-j7xwb',
         sub: 'mock-user-id'
-      } as admin.auth.DecodedIdToken;
+      } as DecodedIdToken;
     }
     
-    const decodedToken = await admin.auth().verifyIdToken(token);
+    const decodedToken = await getAuth().verifyIdToken(token);
     return decodedToken;
   } catch (error) {
     console.error('Token verification failed:', error);

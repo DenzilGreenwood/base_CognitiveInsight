@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { useMemo, useState, useEffect } from "react";
 import { Activity, Database, CheckCircle2, Receipt, ShieldCheck, Loader2, User, LogOut } from "lucide-react";

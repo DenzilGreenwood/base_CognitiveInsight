@@ -7,5 +7,11 @@ service cloud.firestore {
       allow read: if false;              // change to role-gated if you add an admin portal
       allow write: if false;             // block direct client writes
     }
+
+    // Early access collection for Firebase Functions
+    match /early_access/{doc} {
+      allow read: if false;              // No client reads
+      allow write: if false;             // Only Functions can write (server-side)
+    }
   }
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useMemo, useState } from "react";
 import {
   HeroSection,
@@ -71,9 +73,9 @@ export default function CognitiveInsightLanding() {
   };
 
   return (
-    <main className="min-h-screen w-full text-white bg-gradient-to-b from-indigo-900 via-slate-900 to-slate-950 selection:bg-indigo-600/40 selection:text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_10%,rgba(99,102,241,0.35),transparent_60%)]" />
-      <div className="relative z-10 container mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 max-w-7xl">
+    <main className="relative min-h-screen w-full text-white bg-gradient-to-b from-indigo-900 via-slate-900 to-slate-950 selection:bg-indigo-600/40 selection:text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_10%,rgba(99,102,241,0.35),transparent_60%)] pointer-events-none -z-10" />
+      <div className="relative container mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 max-w-7xl">
         {/* Sections */}
         <HeroSection 
           handlers={handlers} 
