@@ -20,8 +20,8 @@ export default function NotFound() {
   return (
     <main className="min-h-screen w-full text-white bg-gradient-to-b from-indigo-900 via-slate-900 to-slate-950 selection:bg-indigo-600/40 selection:text-white">
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_10%,rgba(99,102,241,0.35),transparent_60%)]" />
-        <div className="container mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 max-w-7xl">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_10%,rgba(99,102,241,0.35),transparent_60%)]" />
+        <div className="relative z-10 container mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 max-w-7xl">
           <div className="flex flex-col items-center text-center gap-6">
             <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-wide bg-red-500/20 text-red-200 border border-red-400/20">
               <Search className="w-3.5 h-3.5" /> Page Not Found • 404 Error
@@ -46,7 +46,7 @@ export default function NotFound() {
               {/* Use Link so it works even without JS */}
               <Link
                 href="/"
-                prefetch={true}
+                prefetch={false}
                 className="inline-flex items-center gap-2 rounded-2xl px-5 py-3 font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-400 dark:focus:ring-indigo-600"
                 aria-label="Go to Homepage"
               >
@@ -73,7 +73,7 @@ export default function NotFound() {
                 <Link
                   href="/demo"
                   prefetch={false}
-                  className="inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-offset-2 bg-indigo-500/20 text-indigo-200 hover:bg-indigo-500/30 border border-indigo-400/20"
+                  className="inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-0 bg-indigo-500/20 text-indigo-200 hover:bg-indigo-500/30 border border-indigo-400/20 cursor-pointer"
                   aria-label="Go to Demo"
                 >
                   <Sparkles className="w-3 h-3" /> Demo

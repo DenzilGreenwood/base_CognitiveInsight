@@ -1,8 +1,6 @@
 "use server";
 
 import { z } from "zod";
-import { db } from "@/lib/firebase-admin";
-import { Timestamp } from "firebase-admin/firestore";
 
 const LeadSchema = z.object({
   name: z.string().min(2),
@@ -19,14 +17,28 @@ export async function createLead(input: LeadInput) {
   if (!parsed.success) {
     return { ok: false, error: "Invalid input", issues: parsed.error.flatten() };
   }
-  const data = {
-    ...parsed.data,
-    createdAt: Timestamp.now(),
-    status: "new" as const,
-  };
-  await db.collection("leads").add(data);
-  // Optionally trigger a CF onCreate email; see functions/ below
-  return { ok: true };
+
+  try {
+    // Call the Firebase Function endpoint instead of writing directly to Firestore
+    const response = await fetch('/api/leads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(parsed.data),
+    });
+
+    const result = await response.json();
+    
+    if (!response.ok) {
+      return { ok: false, error: result.error || 'Failed to create lead' };
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error creating lead:', error);
+    return { ok: false, error: 'Network error' };
+  }
 }
 
 /** Simulated demo pipeline for Generate → Verify with capsule math */
