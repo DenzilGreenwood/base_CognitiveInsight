@@ -14,28 +14,28 @@ export default function ThankYouPage() {
         return {
           icon: <Rocket className="w-16 h-16 text-indigo-400 mx-auto mb-6" />,
           title: "Pilot Request Submitted!",
-          description: "Thank you for your interest in our pilot program. Our team will reach out within 24-48 hours to schedule a scoping conversation to discuss your specific requirements and use case.",
+          description: "Thank you for your interest in my pilot program. I'll reach out within 24-48 hours to schedule a scoping conversation to discuss your specific requirements and use case.",
           email: "You should receive a confirmation email shortly with next steps."
         };
       case 'whitepaper':
         return {
           icon: <FileText className="w-16 h-16 text-indigo-400 mx-auto mb-6" />,
           title: "White Paper Request Received!",
-          description: "Thank you for your interest in our white paper. We'll send you the document along with additional resources that might be relevant to your use case.",
+          description: "Thank you for your interest in my white paper. I'll send you the document along with additional resources that might be relevant to your use case.",
           email: "Please check your email for the white paper and follow-up information."
         };
       case 'contact':
         return {
           icon: <CheckCircle className="w-16 h-16 text-indigo-400 mx-auto mb-6" />,
           title: "Message Sent Successfully!",
-          description: "Thank you for contacting us. Our team has received your message and will respond within 24 hours. We appreciate your interest in Cognitive Insight™.",
+          description: "Thank you for contacting me. I've received your message and will respond within 24 hours. I appreciate your interest in Cognitive Insight™.",
           email: "You should receive a confirmation email shortly acknowledging your inquiry."
         };
       default:
         return {
           icon: <CheckCircle className="w-16 h-16 text-indigo-400 mx-auto mb-6" />,
           title: "Thank You!",
-          description: "Your request has been submitted successfully. We appreciate your interest in Cognitive Insight™ and will get back to you soon.",
+          description: "Your request has been submitted successfully. I appreciate your interest in Cognitive Insight™ and will get back to you soon.",
           email: "Please check your email for a confirmation and next steps."
         };
     }
@@ -69,7 +69,7 @@ export default function ThankYouPage() {
         </div>
         
         <p className="mt-6 text-sm text-indigo-300/80">
-          If you don't receive an email within a few minutes, please check your spam folder or contact us at{" "}
+          If you don't receive an email within a few minutes, please check your spam folder or contact me at{" "}
           <a href="mailto:insight@cognitiveinsight.ai" className="text-indigo-200 underline">
             insight@cognitiveinsight.ai
           </a>

@@ -39,7 +39,7 @@ export default function PrivacyPage() {
               <h1 className="text-4xl font-bold">Privacy Policy</h1>
             </div>
             <p className="text-indigo-200 text-lg mb-2">
-              Your privacy is fundamental to our mission of building trustworthy AI systems.
+              Your privacy is fundamental to my mission of building trustworthy AI systems.
             </p>
             <p className="text-indigo-300 text-sm">
               Last updated: {lastUpdated}
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
             <CardContent className="text-indigo-100">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold text-white mb-2">What We Collect</h4>
+                  <h4 className="font-semibold text-white mb-2">What I Collect</h4>
                   <ul className="text-sm space-y-1">
                     <li>• Contact information you provide</li>
                     <li>• Website usage analytics</li>
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-white mb-2">How We Protect You</h4>
+                  <h4 className="font-semibold text-white mb-2">How I Protect You</h4>
                   <ul className="text-sm space-y-1">
                     <li>• GDPR & CCPA compliant</li>
                     <li>• End-to-end encryption</li>
@@ -87,13 +87,13 @@ export default function PrivacyPage() {
               </h2>
               <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
                 <p className="text-indigo-100 mb-4">
-                  Cognitive Insight™ ("we," "our," or "us") is committed to protecting your privacy and maintaining 
-                  the highest standards of data security. This Privacy Policy explains how we collect, use, protect, 
-                  and share information when you use our verifiable AI assurance platform and related services.
+                  Cognitive Insight™ ("I," "my," or "the platform") is committed to protecting your privacy and maintaining 
+                  the highest standards of data security. This Privacy Policy explains how I collect, use, protect, 
+                  and share information when you use the verifiable AI assurance platform and related services.
                 </p>
                 <p className="text-indigo-100">
-                  As a company focused on AI transparency and cryptographic verification, we apply the same 
-                  principles of trust and verifiability to our own data practices.
+                  As the founder focused on AI transparency and cryptographic verification, I apply the same 
+                  principles of trust and verifiability to my own data practices.
                 </p>
               </div>
             </section>
@@ -104,7 +104,7 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
                 <Database className="w-6 h-6 mr-2 text-indigo-400" />
-                Information We Collect
+                Information I Collect
               </h2>
               <div className="space-y-4">
                 
@@ -128,12 +128,12 @@ export default function PrivacyPage() {
                 </div>
 
                 <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
-                  <h3 className="text-lg font-semibold text-white mb-3">Information We Do NOT Collect</h3>
+                  <h3 className="text-lg font-semibold text-white mb-3">Information I Do NOT Collect</h3>
                   <ul className="text-indigo-100 space-y-2">
                     <li>• Social Security numbers or government identification</li>
                     <li>• Financial information or payment data</li>
                     <li>• Biometric data or facial recognition information</li>
-                    <li>• Personal conversations or private communications outside our platform</li>
+                    <li>• Personal conversations or private communications outside the platform</li>
                     <li>• Sensitive personal data without explicit consent</li>
                   </ul>
                 </div>
@@ -146,7 +146,7 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
                 <Users className="w-6 h-6 mr-2 text-indigo-400" />
-                How We Use Your Information
+                How I Use Your Information
               </h2>
               <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
                 <div className="grid md:grid-cols-2 gap-6">
@@ -170,7 +170,7 @@ export default function PrivacyPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-3">Platform Improvement</h3>
                     <ul className="text-indigo-100 space-y-1 text-sm">
-                      <li>• Analyze usage patterns to improve our platform</li>
+                      <li>• Analyze usage patterns to improve the platform</li>
                       <li>• Identify and fix technical issues</li>
                       <li>• Develop new features based on user needs</li>
                     </ul>
@@ -180,7 +180,7 @@ export default function PrivacyPage() {
                     <ul className="text-indigo-100 space-y-1 text-sm">
                       <li>• Comply with applicable laws and regulations</li>
                       <li>• Protect against fraud and security threats</li>
-                      <li>• Enforce our terms of service</li>
+                      <li>• Enforce the terms of service</li>
                     </ul>
                   </div>
                 </div>
@@ -222,8 +222,8 @@ export default function PrivacyPage() {
                 <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
                   <h3 className="text-lg font-semibold text-white mb-3">Organizational Measures</h3>
                   <ul className="text-indigo-100 space-y-2">
-                    <li><strong>Employee Training:</strong> All team members receive regular privacy and security training</li>
-                    <li><strong>Data Minimization:</strong> We collect only the information necessary for our services</li>
+                    <li><strong>Professional Standards:</strong> I maintain strict privacy and security protocols</li>
+                    <li><strong>Data Minimization:</strong> I collect only the information necessary for the services</li>
                     <li><strong>Retention Limits:</strong> Personal data is retained only as long as necessary for business purposes</li>
                     <li><strong>Incident Response:</strong> Comprehensive procedures for detecting and responding to data breaches</li>
                   </ul>
@@ -252,18 +252,18 @@ export default function PrivacyPage() {
                     <ul className="space-y-2 text-sm">
                       <li><strong>Opt-out:</strong> Unsubscribe from marketing communications</li>
                       <li><strong>Object:</strong> Object to certain processing activities</li>
-                      <li><strong>Restrict:</strong> Limit how we use your information</li>
+                      <li><strong>Restrict:</strong> Limit how I use your information</li>
                       <li><strong>Consent:</strong> Withdraw consent for specific data uses</li>
                     </ul>
                   </div>
                 </div>
                 <div className="mt-6 p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
                   <p className="text-indigo-200 text-sm">
-                    <strong>Exercising Your Rights:</strong> To exercise any of these rights, contact us at{" "}
+                    <strong>Exercising Your Rights:</strong> To exercise any of these rights, contact me at{" "}
                     <a href="mailto:privacy@cognitiveinsight.ai" className="text-indigo-100 underline">
                       privacy@cognitiveinsight.ai
                     </a>
-                    . We will respond within 30 days of receiving your request.
+                    . I will respond within 30 days of receiving your request.
                   </p>
                 </div>
               </div>

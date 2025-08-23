@@ -81,7 +81,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           
           <p className="max-w-3xl text-indigo-100/90 text-lg">
             Cognitive Insight™ connects <strong>regulators</strong>, <strong>auditors</strong>, and{" "}
-            <strong>AI companies</strong> with cryptographically verifiable auditability. We bridge policy, 
+            <strong>AI companies</strong> with cryptographically verifiable auditability. I bridge policy, 
             assurance, and engineering—without exposing sensitive models or data.
           </p>
           

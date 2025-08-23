@@ -132,7 +132,7 @@ export default function PilotRequestPage() {
             <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-6" />
             <h1 className="text-3xl font-bold mb-4">Request Submitted Successfully!</h1>
             <p className="text-indigo-200 mb-6">
-              Thank you for your interest in our pilot program. We'll reach out within 24-48 hours 
+              Thank you for your interest in the pilot program. I'll reach out within 24-48 hours 
               to schedule a scoping conversation.
             </p>
             <p className="text-sm text-indigo-300">Redirecting you to confirmation page...</p>
@@ -167,7 +167,7 @@ export default function PilotRequestPage() {
               Request Pilot Program Access
             </h1>
             <p className="text-indigo-200 text-lg">
-              Join our exclusive pilot program to explore how Cognitive Insight™ can provide 
+              Join my exclusive pilot program to explore how Cognitive Insight™ can provide 
               verifiable AI assurance for your organization.
             </p>
           </div>
@@ -264,7 +264,7 @@ export default function PilotRequestPage() {
                     value={formData.useCase}
                     onChange={(e) => handleInputChange('useCase', e.target.value)}
                     className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-h-[120px]"
-                    placeholder="Tell us more about your specific requirements, challenges, or compliance needs..."
+                    placeholder="Tell me more about your specific requirements, challenges, or compliance needs..."
                   />
                 </div>
 
@@ -281,9 +281,9 @@ export default function PilotRequestPage() {
                 {/* Privacy Notice */}
                 <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-lg p-4">
                   <p className="text-sm text-indigo-200">
-                    <strong>Privacy Notice:</strong> By submitting this form, you consent to Cognitive Insight 
+                    <strong>Privacy Notice:</strong> By submitting this form, you consent to Cognitive Insight™ 
                     processing your information to evaluate pilot program fit and provide program updates. 
-                    We comply with GDPR and never share personal data with third parties.
+                    I comply with GDPR and never share personal data with third parties.
                   </p>
                 </div>
 
@@ -309,7 +309,7 @@ export default function PilotRequestPage() {
           {/* Additional Info */}
           <div className="mt-8 text-center">
             <p className="text-indigo-300 text-sm">
-              Questions? Contact us at{" "}
+              Questions? Contact me at{" "}
               <a href="mailto:insight@cognitiveinsight.ai" className="text-indigo-200 underline">
                 insight@cognitiveinsight.ai
               </a>

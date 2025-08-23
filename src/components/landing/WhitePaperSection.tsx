@@ -46,7 +46,7 @@ const WhitePaperSection: React.FC<WhitePaperSectionProps> = ({ className }) => {
         return;
       }
 
-      setMessage("Thank you! We'll email the white paper after reviewing your request.");
+      setMessage("Thank you! I'll email the white paper after reviewing your request.");
       setStatus("success");
       
       // Clear form

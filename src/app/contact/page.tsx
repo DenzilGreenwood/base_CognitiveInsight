@@ -141,7 +141,7 @@ export default function ContactPage() {
             <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-6" />
             <h1 className="text-3xl font-bold mb-4">Message Sent Successfully!</h1>
             <p className="text-indigo-200 mb-6">
-              Thank you for reaching out to us. We'll get back to you within 24 hours.
+              Thank you for reaching out. I'll get back to you within 24 hours.
             </p>
             <p className="text-sm text-indigo-300">Redirecting you to confirmation page...</p>
           </motion.div>
@@ -172,10 +172,10 @@ export default function ContactPage() {
             </Button>
             
             <h1 className="text-4xl font-bold mb-4">
-              Contact Us
+              Contact Me
             </h1>
             <p className="text-indigo-200 text-lg">
-              Get in touch with our team. We're here to help you understand how 
+              Get in touch directly with me. I'm here to help you understand how 
               Cognitive Insight™ can provide verifiable AI assurance for your organization.
             </p>
           </div>
@@ -189,7 +189,7 @@ export default function ContactPage() {
                   <div className="flex items-start">
                     <Mail className="w-6 h-6 text-indigo-400 mt-1 mr-4" />
                     <div>
-                      <h3 className="font-semibold text-white mb-2">Email Us</h3>
+                      <h3 className="font-semibold text-white mb-2">Email Me</h3>
                       <p className="text-indigo-200 text-sm mb-2">
                         For general inquiries and support
                       </p>
@@ -212,7 +212,7 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-white mb-2">Response Time</h3>
                       <p className="text-indigo-200 text-sm mb-2">
-                        We typically respond within
+                        I typically respond within
                       </p>
                       <p className="text-indigo-300 font-medium">24 hours</p>
                     </div>
@@ -263,7 +263,7 @@ export default function ContactPage() {
                 <CardHeader>
                   <CardTitle className="text-white flex items-center">
                     <Send className="w-5 h-5 mr-2" />
-                    Send us a Message
+                    Send me a Message
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -373,7 +373,7 @@ export default function ContactPage() {
                         value={formData.message}
                         onChange={(e) => handleInputChange('message', e.target.value)}
                         className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-h-[150px]"
-                        placeholder="Tell us about your inquiry, requirements, or how we can help you..."
+                        placeholder="Tell me about your inquiry, requirements, or how I can help you..."
                       />
                       {errors.message && (
                         <p className="text-red-400 text-sm">{errors.message}</p>
@@ -393,9 +393,9 @@ export default function ContactPage() {
                     {/* Privacy Notice */}
                     <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-lg p-4">
                       <p className="text-sm text-indigo-200">
-                        <strong>Privacy Notice:</strong> By submitting this form, you consent to Cognitive Insight 
-                        processing your information to respond to your inquiry. We never share personal data with 
-                        third parties. Read our{" "}
+                        <strong>Privacy Notice:</strong> By submitting this form, you consent to Cognitive Insight™ 
+                        processing your information to respond to your inquiry. I never share personal data with 
+                        third parties. Read my{" "}
                         <a href="/privacy" className="text-indigo-300 underline hover:text-indigo-200">
                           Privacy Policy
                         </a>{" "}
@@ -445,7 +445,7 @@ export default function ContactPage() {
                 <div>
                   <h4 className="font-semibold text-white mb-2">How can I join the pilot program?</h4>
                   <p className="text-indigo-200 text-sm">
-                    Contact us through this form or visit our{" "}
+                    Contact me through this form or visit my{" "}
                     <a href="/pilot-request" className="text-indigo-300 underline">pilot request page</a> 
                     {" "}to apply directly.
                   </p>
@@ -453,7 +453,7 @@ export default function ContactPage() {
                 <div>
                   <h4 className="font-semibold text-white mb-2">Do you provide technical support?</h4>
                   <p className="text-indigo-200 text-sm">
-                    Yes, we provide comprehensive technical support for pilot program participants 
+                    Yes, I provide comprehensive technical support for pilot program participants 
                     and enterprise customers.
                   </p>
                 </div>
@@ -478,7 +478,7 @@ export default function ContactPage() {
                   className="block p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
                 >
                   <div className="font-semibold text-white">White Paper</div>
-                  <div className="text-indigo-200 text-sm">Download our research</div>
+                  <div className="text-indigo-200 text-sm">Download my research</div>
                 </a>
                 <a 
                   href="/privacy" 
@@ -494,7 +494,7 @@ export default function ContactPage() {
           {/* Footer Note */}
           <div className="mt-8 text-center">
             <p className="text-indigo-300 text-sm">
-              For urgent matters, please email us directly at{" "}
+              For urgent matters, please email me directly at{" "}
               <a href="mailto:insight@cognitiveinsight.ai" className="text-indigo-200 underline">
                 insight@cognitiveinsight.ai
               </a>

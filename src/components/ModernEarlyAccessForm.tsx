@@ -31,7 +31,7 @@ export default function ModernEarlyAccessForm({ onClose }: { onClose: () => void
         return;
       }
 
-      setSuccessMessage(data.message || "Thanks—we'll be in touch!");
+      setSuccessMessage(data.message || "Thanks—I'll be in touch!");
       setStatus("success");
       
       // Clear form on success
@@ -117,8 +117,8 @@ export default function ModernEarlyAccessForm({ onClose }: { onClose: () => void
 
       {/* Help text */}
       <div className="mt-4 text-xs text-slate-400/70">
-        <p>* Required field. We'll never share your email or spam you.</p>
-        <p>Questions? Email us at <a href="mailto:insight@cognitiveinsight.com" className="text-indigo-400 hover:text-indigo-300">insight@cognitiveinsight.com</a></p>
+        <p>* Required field. I'll never share your email or spam you.</p>
+        <p>Questions? Email me at <a href="mailto:insight@cognitiveinsight.com" className="text-indigo-400 hover:text-indigo-300">insight@cognitiveinsight.com</a></p>
       </div>
     </form>
   );

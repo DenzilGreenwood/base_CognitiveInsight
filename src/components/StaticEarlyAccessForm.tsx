@@ -110,7 +110,7 @@ Please respond with early access information.
         >
           Close
         </button>
-        {status === "ok" && <span className="text-green-400">Thanks—we'll be in touch via email.</span>}
+        {status === "ok" && <span className="text-green-400">Thanks—I'll be in touch via email.</span>}
         {status === "err" && <span className="text-rose-400">Opening email client as fallback.</span>}
       </div>
       

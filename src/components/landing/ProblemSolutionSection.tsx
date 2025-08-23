@@ -88,7 +88,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
     {
       icon: <GaugeCircle className="w-8 h-8 text-emerald-300" />,
       title: "LCM Efficiency",
-      description: `Generate capsules on demand. Internal tests show ~${formatPercent(storageSaved)} storage reduction.`
+      description: `Generate capsules on demand. My internal tests show ~${formatPercent(storageSaved)} storage reduction.`
     },
     {
       icon: <ShieldCheck className="w-8 h-8 text-emerald-300" />,
@@ -100,7 +100,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
   return (
     <section className={cn("container mx-auto px-6 py-16 md:py-24 max-w-7xl", className)}>
       <SectionHeader
-        kicker="The Challenge & Our Answer"
+        kicker="The Challenge & My Answer"
         title="From AI Audit Confusion to Cryptographic Clarity"
         subtitle="Today's compliance is descriptive. Tomorrow's needs to be verifiable."
       />
@@ -146,7 +146,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
             <div className="p-2 rounded-xl bg-green-500/20">
               <ShieldCheck className="w-6 h-6 text-green-300" />
             </div>
-            <h3 className="text-2xl font-bold text-white">Our Solution</h3>
+            <h3 className="text-2xl font-bold text-white">My Solution</h3>
           </div>
           <div className="space-y-6">
             {solutions.map((solution, index) => (
@@ -162,6 +162,12 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
             <p className="text-indigo-100/90 text-sm">
               <strong>Beyond encryption & checksums:</strong> CIAF capsules provide auditable provenance — 
               who created data, when, and how — not just confidentiality.
+            </p>
+          </div>
+          <div className="mt-4 p-4 rounded-2xl bg-slate-600/10 border border-slate-400/30">
+            <p className="text-slate-100/90 text-sm">
+              <strong>Implementation Note:</strong> Implementation details are proprietary and patent-pending. 
+              The description here highlights outcomes, not underlying methods.
             </p>
           </div>
         </div>

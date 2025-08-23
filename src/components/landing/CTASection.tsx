@@ -59,7 +59,7 @@ const CTASection: React.FC<CTASectionProps> = ({ handlePilot, className }) => {
         return;
       }
 
-      setMessage("Thank you! We'll reach out to schedule a scoping conversation.");
+      setMessage("Thank you! I'll reach out to schedule a scoping conversation.");
       setStatus("success");
       
       // Clear form and close after delay
@@ -87,7 +87,7 @@ const CTASection: React.FC<CTASectionProps> = ({ handlePilot, className }) => {
         <div className="relative z-10">
           <h3 className="text-2xl md:text-3xl font-extrabold">Be Part of the Bridge</h3>
           <p className="text-indigo-100/90 mt-2 max-w-3xl">
-            We're convening regulators, auditors, and AI providers to pilot verifiable AI assurance in real deployments.
+            I'm convening regulators, auditors, and AI providers to pilot verifiable AI assurance in real deployments.
             Join as a design partner, pilot participant, or standards collaborator.
           </p>
           
