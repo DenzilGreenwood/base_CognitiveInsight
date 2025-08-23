@@ -17,7 +17,7 @@ export default function ModernEarlyAccessForm({ onClose }: { onClose: () => void
     setSuccessMessage("");
 
     try {
-      const res = await fetch("/api/early-access", {
+      const res = await fetch("/api/early-access-sendgrid", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, name, useCase })

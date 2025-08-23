@@ -1,12 +1,9 @@
 // src/app/api/admin/early-access/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { getFirestore } from "firebase-admin/firestore";
-import "../../../../lib/firebase-admin";
+import { getFirebaseAdmin } from "../../../../lib/firebase-admin";
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
-
-const db = getFirestore();
 
 // Simple API key authentication (replace with your preferred auth)
 function validateApiKey(request: NextRequest): boolean {
@@ -26,6 +23,14 @@ export async function GET(request: NextRequest) {
     // Check authentication
     if (!validateApiKey(request)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Get Firebase Admin instances
+    const { db } = getFirebaseAdmin();
+
+    // Check if database is available
+    if (!db) {
+      return NextResponse.json({ error: "Service temporarily unavailable" }, { status: 503 });
     }
 
     // Get query parameters
@@ -53,7 +58,7 @@ export async function GET(request: NextRequest) {
 
     // Execute query
     const snapshot = await query.get();
-    const submissions = snapshot.docs.map(doc => ({
+    const submissions = snapshot.docs.map((doc: any) => ({
       id: doc.id,
       ...doc.data(),
       submittedAt: doc.data().submittedAt?.toDate?.()?.toISOString() || null
@@ -85,6 +90,14 @@ export async function PATCH(request: NextRequest) {
     // Check authentication
     if (!validateApiKey(request)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Get Firebase Admin instances
+    const { db } = getFirebaseAdmin();
+
+    // Check if database is available
+    if (!db) {
+      return NextResponse.json({ error: "Service temporarily unavailable" }, { status: 503 });
     }
 
     const { id, status, notes } = await request.json();
@@ -135,6 +148,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Get Firebase Admin instances
+    const { db } = getFirebaseAdmin();
+
+    // Check if database is available
+    if (!db) {
+      return NextResponse.json({ error: "Service temporarily unavailable" }, { status: 503 });
+    }
+
     const snapshot = await db.collection("early_access")
       .orderBy("submittedAt", "desc")
       .get();
@@ -149,7 +170,7 @@ export async function POST(request: NextRequest) {
       'Source'
     ].join(',');
 
-    const csvRows = snapshot.docs.map(doc => {
+    const csvRows = snapshot.docs.map((doc: any) => {
       const data = doc.data();
       return [
         `"${data.email || ''}"`,

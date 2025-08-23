@@ -62,6 +62,13 @@ const SolutionSection: React.FC<SolutionSectionProps> = ({ storageSaved, classNa
         title="CIAF + Lazy Capsule Materialization"
         subtitle="Selective, verifiable, privacy-preserving audit capsules anchored with cryptographic chains."
       />
+      
+      <div className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30">
+        <p className="text-indigo-100/90 text-sm">
+          <strong>Beyond encryption & checksums:</strong> Unlike basic encryption or checksums, CIAF capsules provide auditable provenance — who created data, when, and how — not just confidentiality.
+        </p>
+      </div>
+      
       <div className="mt-10 grid md:grid-cols-2 gap-6">
         {solutions.map((solution, index) => (
           <SolutionCard

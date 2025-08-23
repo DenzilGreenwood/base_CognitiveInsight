@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { 
   ShieldCheck, 
   FileText, 
-  Activity, 
   ArrowRight, 
   Sparkles 
 } from "lucide-react";
@@ -11,10 +10,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import type { DemoHandlers } from "./types";
 
 interface HeroSectionProps {
-  handlers: DemoHandlers;
+  handleWhitePaper: () => void;
+  handlePilot: () => void;
   estimatedRetrievalMs: number;
   className?: string;
 }
@@ -49,12 +48,11 @@ const StatsCard: React.FC<StatsCardProps> = ({ label, value, index = 0 }) => (
 );
 
 const HeroSection: React.FC<HeroSectionProps> = ({ 
-  handlers, 
+  handleWhitePaper, 
+  handlePilot,
   estimatedRetrievalMs, 
   className 
 }) => {
-  const { handleWhitePaper, handleDemo, handlePilot } = handlers;
-
   const statsData = [
     { label: "Storage Savings", value: "~85%" },
     { label: "Verification", value: `~${estimatedRetrievalMs}ms` },
@@ -95,15 +93,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               <FileText className="w-4 h-4" /> Request White Paper
             </Button>
             <Button 
-              variant="outline" 
-              onClick={handleDemo}
-              className="bg-white text-indigo-700 hover:bg-indigo-50 border border-indigo-200 rounded-2xl px-5 py-3"
-            >
-              <Activity className="w-4 h-4" /> Explore Demo
-            </Button>
-            <Button 
               variant="ghost" 
               onClick={handlePilot}
+              data-pilot-button
               className="bg-transparent text-indigo-100 hover:text-white hover:bg-white/10 rounded-2xl px-5 py-3"
             >
               <HandshakeIcon /> Request Pilot <ArrowRight className="w-4 h-4" />
@@ -125,6 +117,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               />
             ))}
           </motion.div>
+          
+          <motion.p 
+            className="text-xs text-indigo-300/60 mt-4 max-w-3xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+          >
+            * Performance metrics based on internal simulations; results vary by workload and configuration.
+          </motion.p>
         </div>
       </section>
   );

@@ -19,13 +19,18 @@ export async function createLead(input: LeadInput) {
   }
 
   try {
-    // Call the Firebase Function endpoint instead of writing directly to Firestore
-    const response = await fetch('/api/leads', {
+    // Call the SendGrid-enabled early access API
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/early-access-sendgrid`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(parsed.data),
+      body: JSON.stringify({
+        email: parsed.data.email,
+        name: parsed.data.name,
+        useCase: parsed.data.company ? `${parsed.data.company}${parsed.data.notes ? ` - ${parsed.data.notes}` : ''}` : parsed.data.notes,
+        source: parsed.data.source || 'form'
+      }),
     });
 
     const result = await response.json();

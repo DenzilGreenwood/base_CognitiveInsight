@@ -1,18 +1,16 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   HeroSection,
   YourStorySection,
-  ProblemSection,
-  SolutionSection,
+  ProblemSolutionSection,
   StakeholdersSection,
-  DemoSection,
   WhitePaperSection,
   CTASection,
   Footer,
   type SimulationState,
-  type DemoHandlers,
 } from "@/components/landing";
 
 /**
@@ -21,12 +19,12 @@ import {
  * • Stack: React + Tailwind (modular components)
  * • Purpose: Serve as your bridge-building homepage without revealing patent IP.
  * • Sections: Hero, Social Proof, Your Story, Problem, Solution (CIAF + LCM),
- *   Stakeholders, Demo (simulated), White Paper (form), CTA, Footer
+ *   Stakeholders, White Paper (form), CTA, Footer
  * • Note: Keep the headline "Turn Confusion into Cryptographic Clarity" as requested.
  */
 
 export default function CognitiveInsightLanding() {
-  const [dataset, setDataset] = useState(1000); // Changed to match DemoSection range (10-10000 GB)
+  const router = useRouter();
   const [auditRatio, setAuditRatio] = useState(10);
   const storageSaved = useMemo(() => 85, []);
 
@@ -37,39 +35,21 @@ export default function CognitiveInsightLanding() {
     return Math.round(base * factor);
   }, [auditRatio]);
 
-  const simulationState: SimulationState = {
-    dataset,
-    auditRatio,
-    storageSaved,
-    estimatedRetrievalMs,
+  const handleWhitePaper = () => {
+    // Scroll to WhitePaper section
+    const element = document.querySelector('[data-section="whitepaper"]');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      alert(
+        "Thanks! We'll share the white paper via email after a quick intro call. (In production, this button routes to your form or CRM.)"
+      );
+    }
   };
 
-  const handlers: DemoHandlers = {
-    handleWhitePaper: () => {
-      // Scroll to WhitePaper section
-      const element = document.querySelector('[data-section="whitepaper"]');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        alert(
-          "Thanks! We'll share the white paper via email after a quick intro call. (In production, this button routes to your form or CRM.)"
-        );
-      }
-    },
-    handleDemo: () => {
-      // Scroll to Demo section
-      const element = document.querySelector('[data-section="demo"]');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        window.location.href = '/demo';
-      }
-    },
-    handlePilot: () => {
-      alert(
-        "Thanks for your interest in a pilot! We'll follow up to schedule a scoping conversation."
-      );
-    },
+  const handlePilot = () => {
+    // Navigate to dedicated pilot request page
+    router.push('/pilot-request');
   };
 
   return (
@@ -78,29 +58,23 @@ export default function CognitiveInsightLanding() {
       <div className="relative container mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24 max-w-7xl">
         {/* Sections */}
         <HeroSection 
-          handlers={handlers} 
+          handleWhitePaper={handleWhitePaper}
+          handlePilot={handlePilot}
           estimatedRetrievalMs={estimatedRetrievalMs} 
         />
         
         <YourStorySection />
         
-        <ProblemSection />
-        
-        <SolutionSection storageSaved={storageSaved} />
+        <ProblemSolutionSection storageSaved={storageSaved} />
         
         <StakeholdersSection />
         
-        <DemoSection
-          data-section="demo"
-          simulation={simulationState}
-          onDatasetChange={setDataset}
-          onAuditRatioChange={setAuditRatio}
-          handlers={handlers}
-        />
-        
         <WhitePaperSection data-section="whitepaper" />
         
-        <CTASection handlers={handlers} />
+        <CTASection 
+          data-section="cta"
+          handlePilot={handlePilot}
+        />
         
         <Footer />
       </div>

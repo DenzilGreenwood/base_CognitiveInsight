@@ -12,9 +12,3 @@ export interface SimulationState {
   storageSaved: number;
   estimatedRetrievalMs: number;
 }
-
-export interface DemoHandlers {
-  handleWhitePaper: () => void;
-  handleDemo: () => void;
-  handlePilot: () => void;
-}

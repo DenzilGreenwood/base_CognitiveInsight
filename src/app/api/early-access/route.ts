@@ -1,12 +1,10 @@
 // src/app/api/early-access/route.ts - Enhanced version
 import { NextRequest, NextResponse } from "next/server";
-import { getFirestore, Timestamp } from "firebase-admin/firestore";
-import "../../../lib/firebase-admin"; // Initialize the admin SDK
+import { Timestamp } from "firebase-admin/firestore";
+import { getFirebaseAdmin } from "../../../lib/firebase-admin";
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
-
-const db = getFirestore();
 
 // Rate limiting helper (simple in-memory store)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -44,6 +42,17 @@ function sanitizeInput(input: string): string {
 
 export async function POST(request: NextRequest) {
   try {
+    // Get Firebase Admin instances
+    const { db } = getFirebaseAdmin();
+    
+    // Check if database is available
+    if (!db) {
+      return NextResponse.json(
+        { error: "Service temporarily unavailable" }, 
+        { status: 503 }
+      );
+    }
+
     // Get client IP for rate limiting
     const clientIP = request.headers.get('x-forwarded-for') || 
                     request.headers.get('x-real-ip') || 

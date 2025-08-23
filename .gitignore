@@ -106,4 +106,6 @@ functions/node_modules/
 **/*firebase-adminsdk*.json
 
 # Google Cloud
-.gcloudignore
+.gcloudignoresendgrid.env
+
+sendgrid.env

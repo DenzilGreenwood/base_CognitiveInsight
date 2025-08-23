@@ -13,7 +13,6 @@ The landing page has been broken down into the following modular components:
 - **`ProblemSection.tsx`** - Problem statement section highlighting AI auditability challenges
 - **`SolutionSection.tsx`** - Solution overview featuring CIAF + LCM
 - **`StakeholdersSection.tsx`** - Value propositions for different stakeholder groups
-- **`DemoSection.tsx`** - Interactive simulation with sliders and metrics
 - **`WhitePaperSection.tsx`** - Contact form for white paper requests
 - **`CTASection.tsx`** - Call-to-action section for pilot requests
 - **`Footer.tsx`** - Site footer with copyright and links
@@ -72,7 +71,6 @@ src/components/landing/
 ├── ProblemSection.tsx    # Problem section
 ├── SolutionSection.tsx   # Solution section
 ├── StakeholdersSection.tsx # Stakeholders section
-├── DemoSection.tsx       # Demo section
 ├── WhitePaperSection.tsx # White paper section
 ├── CTASection.tsx        # CTA section
 └── Footer.tsx            # Footer
