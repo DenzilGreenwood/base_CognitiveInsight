@@ -24,6 +24,13 @@ export default function ThankYouPage() {
           description: "Thank you for your interest in our white paper. We'll send you the document along with additional resources that might be relevant to your use case.",
           email: "Please check your email for the white paper and follow-up information."
         };
+      case 'contact':
+        return {
+          icon: <CheckCircle className="w-16 h-16 text-indigo-400 mx-auto mb-6" />,
+          title: "Message Sent Successfully!",
+          description: "Thank you for contacting us. Our team has received your message and will respond within 24 hours. We appreciate your interest in Cognitive Insight™.",
+          email: "You should receive a confirmation email shortly acknowledging your inquiry."
+        };
       default:
         return {
           icon: <CheckCircle className="w-16 h-16 text-indigo-400 mx-auto mb-6" />,

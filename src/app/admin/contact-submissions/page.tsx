@@ -1,103 +1,113 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { 
   Calendar, 
   Mail, 
   Building2, 
-  FileText, 
+  MessageSquare, 
   Clock, 
   CheckCircle,
   AlertCircle,
   RefreshCw,
   Eye,
-  EyeOff
+  EyeOff,
+  Tag,
+  User,
+  ArrowLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useRouter } from 'next/navigation';
 
-interface PilotRequest {
+interface ContactSubmission {
   id: string;
   name: string;
   email: string;
-  organization: string;
-  pilotScope?: string;
-  useCase?: string;
+  organization?: string;
+  subject?: string;
+  category: string;
+  message: string;
   source: string;
   submittedAt: string;
   status: string;
-  followUpScheduled: boolean;
   ipAddress?: string;
   userAgent?: string;
 }
 
-export default function PilotRequestsAdmin() {
+export default function ContactSubmissionsAdmin() {
   const router = useRouter();
-  const [requests, setRequests] = useState<PilotRequest[]>([]);
+  const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [configMessage, setConfigMessage] = useState<string | null>(null);
-  const [expandedRequest, setExpandedRequest] = useState<string | null>(null);
+  const [expandedSubmission, setExpandedSubmission] = useState<string | null>(null);
 
-  const fetchRequests = async () => {
+  const fetchSubmissions = async () => {
     setLoading(true);
     setError(null);
     setConfigMessage(null);
     
     try {
-      const response = await fetch('/api/admin/pilot-requests');
+      const response = await fetch('/api/admin/contact-submissions');
       
       if (!response.ok) {
-        throw new Error(`Failed to fetch requests: ${response.status}`);
+        throw new Error(`Failed to fetch submissions: ${response.status}`);
       }
       
       const data = await response.json();
       
       if (data.success) {
-        setRequests(data.requests || []);
+        setSubmissions(data.submissions || []);
         if (data.message) {
           setConfigMessage(data.message);
         }
       } else {
-        throw new Error(data.error || 'Failed to fetch requests');
+        throw new Error(data.error || 'Failed to fetch submissions');
       }
     } catch (error) {
-      console.error('Error fetching pilot requests:', error);
-      setError(error instanceof Error ? error.message : 'Failed to load pilot requests');
+      console.error('Error fetching contact submissions:', error);
+      setError(error instanceof Error ? error.message : 'Failed to load contact submissions');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRequests();
+    fetchSubmissions();
   }, []);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString();
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'pending_scoping':
-        return <Badge variant="default" className="bg-yellow-500">Pending Scoping</Badge>;
-      case 'scoping_scheduled':
-        return <Badge variant="default" className="bg-blue-500">Scoping Scheduled</Badge>;
-      case 'in_progress':
-        return <Badge variant="default" className="bg-green-500">In Progress</Badge>;
-      case 'completed':
-        return <Badge variant="default" className="bg-gray-500">Completed</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
+  const getCategoryBadge = (category: string) => {
+    const categoryConfig = {
+      general: { color: 'bg-gray-500', label: 'General' },
+      pilot: { color: 'bg-blue-500', label: 'Pilot Program' },
+      technical: { color: 'bg-green-500', label: 'Technical' },
+      partnership: { color: 'bg-purple-500', label: 'Partnership' },
+      media: { color: 'bg-yellow-500', label: 'Media' },
+      support: { color: 'bg-red-500', label: 'Support' }
+    };
+
+    const config = categoryConfig[category as keyof typeof categoryConfig] || categoryConfig.general;
+    return <Badge variant="default" className={config.color}>{config.label}</Badge>;
   };
 
-  const toggleExpanded = (requestId: string) => {
-    setExpandedRequest(expandedRequest === requestId ? null : requestId);
+  const toggleExpanded = (submissionId: string) => {
+    setExpandedSubmission(expandedSubmission === submissionId ? null : submissionId);
+  };
+
+  const getSubmissionsByCategory = () => {
+    const categories = submissions.reduce((acc, submission) => {
+      acc[submission.category] = (acc[submission.category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    return categories;
   };
 
   if (loading) {
@@ -106,7 +116,7 @@ export default function PilotRequestsAdmin() {
         <div className="container mx-auto px-6 py-16 max-w-6xl">
           <div className="flex items-center justify-center">
             <RefreshCw className="w-8 h-8 animate-spin text-indigo-400" />
-            <span className="ml-3 text-lg">Loading pilot requests...</span>
+            <span className="ml-3 text-lg">Loading contact submissions...</span>
           </div>
         </div>
       </main>
@@ -126,11 +136,19 @@ export default function PilotRequestsAdmin() {
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-4xl font-bold mb-2">Pilot Program Requests</h1>
-              <p className="text-indigo-200">Manage and track pilot program applications</p>
+              <Button
+                variant="ghost"
+                onClick={() => router.back()}
+                className="text-indigo-200 hover:text-white mb-4 p-0"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </Button>
+              <h1 className="text-4xl font-bold mb-2">Contact Submissions</h1>
+              <p className="text-indigo-200">Manage and track contact form submissions</p>
             </div>
             <Button
-              onClick={fetchRequests}
+              onClick={fetchSubmissions}
               className="bg-indigo-600 hover:bg-indigo-700"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
@@ -159,14 +177,14 @@ export default function PilotRequestsAdmin() {
           )}
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <Card className="bg-white/5 border-white/10">
               <CardContent className="p-4">
                 <div className="flex items-center">
-                  <FileText className="w-8 h-8 text-blue-400" />
+                  <MessageSquare className="w-8 h-8 text-blue-400" />
                   <div className="ml-3">
-                    <p className="text-sm text-indigo-200">Total Requests</p>
-                    <p className="text-2xl font-bold">{requests.length}</p>
+                    <p className="text-sm text-indigo-200">Total Submissions</p>
+                    <p className="text-2xl font-bold">{submissions.length}</p>
                   </div>
                 </div>
               </CardContent>
@@ -177,9 +195,13 @@ export default function PilotRequestsAdmin() {
                 <div className="flex items-center">
                   <Clock className="w-8 h-8 text-yellow-400" />
                   <div className="ml-3">
-                    <p className="text-sm text-indigo-200">Pending Scoping</p>
+                    <p className="text-sm text-indigo-200">Today</p>
                     <p className="text-2xl font-bold">
-                      {requests.filter(r => r.status === 'pending_scoping').length}
+                      {submissions.filter(s => {
+                        const today = new Date().toDateString();
+                        const subDate = new Date(s.submittedAt).toDateString();
+                        return today === subDate;
+                      }).length}
                     </p>
                   </div>
                 </div>
@@ -189,11 +211,25 @@ export default function PilotRequestsAdmin() {
             <Card className="bg-white/5 border-white/10">
               <CardContent className="p-4">
                 <div className="flex items-center">
-                  <CheckCircle className="w-8 h-8 text-green-400" />
+                  <Tag className="w-8 h-8 text-green-400" />
                   <div className="ml-3">
-                    <p className="text-sm text-indigo-200">In Progress</p>
+                    <p className="text-sm text-indigo-200">Most Common</p>
+                    <p className="text-lg font-bold">
+                      {Object.entries(getSubmissionsByCategory()).sort(([,a], [,b]) => b - a)[0]?.[0] || 'N/A'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/5 border-white/10">
+              <CardContent className="p-4">
+                <div className="flex items-center">
+                  <Building2 className="w-8 h-8 text-purple-400" />
+                  <div className="ml-3">
+                    <p className="text-sm text-indigo-200">With Organization</p>
                     <p className="text-2xl font-bold">
-                      {requests.filter(r => r.status === 'in_progress').length}
+                      {submissions.filter(s => s.organization && s.organization.trim()).length}
                     </p>
                   </div>
                 </div>
@@ -201,15 +237,15 @@ export default function PilotRequestsAdmin() {
             </Card>
           </div>
 
-          {/* Requests List */}
+          {/* Submissions List */}
           <div className="space-y-4">
-            {configMessage && requests.length === 0 ? (
+            {configMessage && submissions.length === 0 ? (
               <Card className="bg-white/5 border-white/10">
                 <CardContent className="p-8 text-center">
-                  <FileText className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                  <MessageSquare className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold mb-2">Firebase Configuration Required</h3>
                   <p className="text-indigo-200 mb-4">
-                    To view and store pilot requests, please configure Firebase Admin SDK with proper credentials.
+                    To view and store contact submissions, please configure Firebase Admin SDK with proper credentials.
                   </p>
                   <div className="text-left bg-slate-800/50 rounded-lg p-4 mb-4">
                     <p className="text-sm text-indigo-200 mb-2">Required environment variables:</p>
@@ -220,45 +256,51 @@ export default function PilotRequestsAdmin() {
                     </ul>
                   </div>
                   <p className="text-sm text-indigo-300">
-                    Once configured, pilot requests will be automatically stored and displayed here.
+                    Once configured, contact submissions will be automatically stored and displayed here.
                   </p>
                 </CardContent>
               </Card>
-            ) : requests.length === 0 ? (
+            ) : submissions.length === 0 ? (
               <Card className="bg-white/5 border-white/10">
                 <CardContent className="p-8 text-center">
-                  <FileText className="w-12 h-12 text-indigo-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">No Pilot Requests Yet</h3>
+                  <MessageSquare className="w-12 h-12 text-indigo-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">No Contact Submissions Yet</h3>
                   <p className="text-indigo-200">
-                    Pilot program requests will appear here when submitted through your website.
+                    Contact form submissions will appear here when submitted through your website.
                   </p>
                 </CardContent>
               </Card>
             ) : (
-              requests.map((request) => (
-                <Card key={request.id} className="bg-white/5 border-white/10">
+              submissions.map((submission) => (
+                <Card key={submission.id} className="bg-white/5 border-white/10">
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
                         <div>
                           <CardTitle className="text-white flex items-center">
-                            <Building2 className="w-5 h-5 mr-2" />
-                            {request.organization}
+                            <User className="w-5 h-5 mr-2" />
+                            {submission.name}
+                            {submission.organization && (
+                              <span className="text-indigo-300 ml-2 font-normal">
+                                • {submission.organization}
+                              </span>
+                            )}
                           </CardTitle>
-                          <p className="text-indigo-200 mt-1">
-                            {request.name} • {request.email}
+                          <p className="text-indigo-200 mt-1 flex items-center">
+                            <Mail className="w-4 h-4 mr-1" />
+                            {submission.email}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        {getStatusBadge(request.status)}
+                        {getCategoryBadge(submission.category)}
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => toggleExpanded(request.id)}
+                          onClick={() => toggleExpanded(submission.id)}
                           className="text-indigo-200 hover:text-white"
                         >
-                          {expandedRequest === request.id ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          {expandedSubmission === submission.id ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </Button>
                       </div>
                     </div>
@@ -268,50 +310,68 @@ export default function PilotRequestsAdmin() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div className="flex items-center text-sm text-indigo-200">
                         <Calendar className="w-4 h-4 mr-2" />
-                        {formatDate(request.submittedAt)}
+                        {formatDate(submission.submittedAt)}
                       </div>
                       <div className="flex items-center text-sm text-indigo-200">
-                        <Mail className="w-4 h-4 mr-2" />
-                        Source: {request.source}
+                        <Tag className="w-4 h-4 mr-2" />
+                        Source: {submission.source}
                       </div>
                     </div>
                     
-                    {request.pilotScope && (
+                    {submission.subject && (
                       <div className="mb-4">
-                        <h4 className="font-semibold text-white mb-2">Pilot Scope:</h4>
+                        <h4 className="font-semibold text-white mb-2">Subject:</h4>
                         <p className="text-indigo-200 text-sm bg-white/5 rounded p-3">
-                          {request.pilotScope}
+                          {submission.subject}
                         </p>
                       </div>
                     )}
+
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-white mb-2">Message:</h4>
+                      <p className="text-indigo-200 text-sm bg-white/5 rounded p-3">
+                        {submission.message}
+                      </p>
+                    </div>
                     
-                    {expandedRequest === request.id && (
+                    {expandedSubmission === submission.id && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         className="border-t border-white/10 pt-4 mt-4"
                       >
-                        {request.useCase && (
-                          <div className="mb-4">
-                            <h4 className="font-semibold text-white mb-2">Detailed Use Case:</h4>
-                            <p className="text-indigo-200 text-sm bg-white/5 rounded p-3">
-                              {request.useCase}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="text-white font-medium">Submission ID:</span>
+                            <span className="text-indigo-200 ml-2">{submission.id}</span>
+                          </div>
+                          {submission.ipAddress && (
+                            <div>
+                              <span className="text-white font-medium">IP Address:</span>
+                              <span className="text-indigo-200 ml-2">{submission.ipAddress}</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        {submission.userAgent && (
+                          <div className="mt-3 text-sm">
+                            <span className="text-white font-medium">User Agent:</span>
+                            <p className="text-indigo-200 text-xs mt-1 bg-white/5 rounded p-2 break-all">
+                              {submission.userAgent}
                             </p>
                           </div>
                         )}
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                          <div>
-                            <span className="text-white font-medium">Request ID:</span>
-                            <span className="text-indigo-200 ml-2">{request.id}</span>
-                          </div>
-                          {request.ipAddress && (
-                            <div>
-                              <span className="text-white font-medium">IP Address:</span>
-                              <span className="text-indigo-200 ml-2">{request.ipAddress}</span>
-                            </div>
-                          )}
+
+                        <div className="mt-4 flex gap-2">
+                          <Button
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700"
+                            onClick={() => window.open(`mailto:${submission.email}?subject=Re: ${submission.subject || 'Your inquiry'}`)}
+                          >
+                            <Mail className="w-4 h-4 mr-1" />
+                            Reply via Email
+                          </Button>
                         </div>
                       </motion.div>
                     )}
@@ -320,14 +380,15 @@ export default function PilotRequestsAdmin() {
               ))
             )}
           </div>
+
           {/* Navigation Links */}
           <div className="mt-8 flex justify-center">
             <Button
               variant="outline"
-              onClick={() => router.push('/admin/contact-submissions')}
+              onClick={() => router.push('/admin/pilot-requests')}
               className="border-white/20 text-white hover:bg-white/10"
             >
-              View Contact Submissions
+              View Pilot Requests
             </Button>
           </div>
         </motion.div>
