@@ -474,7 +474,7 @@ export default function ContactPage() {
                   <div className="text-indigo-200 text-sm">Apply for early access</div>
                 </a>
                 <a 
-                  href="/#whitepaper" 
+                  href="/white-paper" 
                   className="block p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
                 >
                   <div className="font-semibold text-white">White Paper</div>

@@ -37,7 +37,7 @@ export default function MetricsKPI({
         <StatCard
           title="Storage Savings"
           value={`~${safePct}%`}
-          icon={<HardDriveDownload className="w-5 h-5" />}
+          icon={<HardDriveDownload className="w-5 h-5 text-emerald-400" />}
           barPct={safePct}
           barLabel={`${safePct}% reduction vs raw logs`}
         >
@@ -50,7 +50,7 @@ export default function MetricsKPI({
         <StatCard
           title="Verification"
           value={`~${verifyMs} ms`}
-          icon={<Timer className="w-5 h-5" />}
+          icon={<Timer className="w-5 h-5 text-amber-400" />}
           barPct={verifyScore}
           barLabel={`Relative performance score`}
         >
@@ -63,7 +63,7 @@ export default function MetricsKPI({
         <StatCard
           title="Alignment"
           value={alignment}
-          icon={<ShieldCheck className="w-5 h-5" />}
+          icon={<ShieldCheck className="w-5 h-5 text-blue-400" />}
           noBar
         >
           <p className="text-xs text-indigo-200/80">
@@ -75,7 +75,7 @@ export default function MetricsKPI({
         <StatCard
           title="Privacy"
           value="No model/data exposure"
-          icon={<ShieldCheck className="w-5 h-5" />}
+          icon={<ShieldCheck className="w-5 h-5 text-purple-400" />}
           noBar
         >
           <p className="text-xs text-indigo-200/80">

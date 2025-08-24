@@ -34,22 +34,22 @@ const formatPercent = (n: number) => `${Math.round(n)}%`;
 const SolutionSection: React.FC<SolutionSectionProps> = ({ storageSaved, className }) => {
   const solutions = [
     {
-      icon: <Receipt className="w-12 h-12 text-emerald-300" />,
+      icon: <Receipt className="w-8 h-8 text-emerald-300" />,
       title: "Proof Capsules",
       description: "Tamper-evident receipts for training, inference, configuration, and compliance events. Auditors and regulators can independently verify without accessing sensitive data."
     },
     {
-      icon: <GaugeCircle className="w-12 h-12 text-sky-300" />,
+      icon: <GaugeCircle className="w-8 h-8 text-sky-300" />,
       title: "LCM Efficiency",
       description: `Generate capsules on demand for the events that matter. Our internal tests show ~${formatPercent(storageSaved)} storage reduction versus eager logging.`
     },
     {
-      icon: <ShieldCheck className="w-12 h-12 text-teal-300" />,
+      icon: <ShieldCheck className="w-8 h-8 text-teal-300" />,
       title: "Capsule Anchoring",
       description: "Capsules are chained with cryptographic commitments for rapid, trustworthy verification."
     },
     {
-      icon: <Lock className="w-12 h-12 text-indigo-300" />,
+      icon: <Lock className="w-8 h-8 text-indigo-300" />,
       title: "Privacy by Design",
       description: "Prove compliance claims without disclosing model weights, prompts, or proprietary data."
     }

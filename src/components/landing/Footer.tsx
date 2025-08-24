@@ -23,7 +23,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
         </div>
         <div className="flex items-center gap-4 text-indigo-200/80 text-sm">
           <a className="hover:text-white" href="/privacy" title="Privacy Policy">Privacy</a>
-          <a className="hover:text-white" href="#" title="Contact Us">Contact</a>
+          <a className="hover:text-white" href="/contact" title="Contact Us">Contact</a>
         </div>
       </div>
       

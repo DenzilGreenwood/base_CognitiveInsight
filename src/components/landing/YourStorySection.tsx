@@ -31,22 +31,22 @@ interface YourStorySectionProps {
 const YourStorySection: React.FC<YourStorySectionProps> = ({ className }) => {
   const storyItems = [
     {
-      icon: <Lock className="w-12 h-12 text-indigo-300" />,
+      icon: <Lock className="w-12 h-12 text-amber-400" />,
       title: "Early Spark",
       description: "My first encounter with cryptography was in 5th–6th grade while in LD classes. I could crack codes and solve puzzles without yet seeing the bigger system. That mindset—solve tangibly first—stuck with me."
     },
     {
-      icon: <Landmark className="w-12 h-12 text-indigo-300" />,
+      icon: <Landmark className="w-12 h-12 text-blue-400" />,
       title: "Compliance Fluency",
       description: "5.5 years in regulated environments taught me what counts as acceptable evidence, and how to work with regulators and auditors to reach provable outcomes."
     },
     {
-      icon: <Database className="w-12 h-12 text-indigo-300" />,
+      icon: <Database className="w-12 h-12 text-cyan-400" />,
       title: "Data Science Bridge",
       description: "As a Master's student in Data Science, I translate between engineering, policy, and assurance—enabling practical, measurable governance."
     },
     {
-      icon: <Sparkles className="w-12 h-12 text-indigo-300" />,
+      icon: <Sparkles className="w-12 h-12 text-fuchsia-400" />,
       title: "Discovery → CIAF + LCM",
       description: "While encrypting data for an AI support tool, I discovered a scalable approach to AI auditability. This evolved into the Cognitive Insight™ Audit Framework, which includes an efficiency method called Lazy Capsule Materialization."
     }

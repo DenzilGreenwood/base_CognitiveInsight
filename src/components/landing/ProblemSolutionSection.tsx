@@ -93,17 +93,17 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
   };
   const problems = [
     {
-      icon: <AlertTriangle className="w-8 h-8 text-amber-300" />,
+      icon: <AlertTriangle className="w-12 h-12 text-amber-300" />,
       title: "Descriptive ≠ Verifiable",
       description: "Model and system cards describe intent, but auditors need independent, tamper-evident proof."
     },
     {
-      icon: <GitBranch className="w-8 h-8 text-amber-300" />,
+      icon: <GitBranch className="w-12 h-12 text-amber-300" />,
       title: "Lineage Without Integrity",
       description: "OpenLineage tracks events; without cryptographic anchoring, evidence can be disputed."
     },
     {
-      icon: <TimerReset className="w-8 h-8 text-amber-300" />,
+      icon: <TimerReset className="w-12 h-12 text-amber-300" />,
       title: "Proof at Production Speed",
       description: "zkML is powerful but often heavy; we need scalable verification paths for live systems."
     }
@@ -111,17 +111,17 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
 
   const solutions = [
     {
-      icon: <Receipt className="w-8 h-8 text-emerald-300" />,
+      icon: <Receipt className="w-12 h-12 text-emerald-300" />,
       title: "Proof Capsules",
       description: "Tamper-evident receipts for training, inference, configuration, and compliance events."
     },
     {
-      icon: <GaugeCircle className="w-8 h-8 text-emerald-300" />,
+      icon: <GaugeCircle className="w-12 h-12 text-emerald-300" />,
       title: "LCM Efficiency",
       description: `Generate capsules on demand. My internal tests show ~${formatPercent(storageSaved)} storage reduction.`
     },
     {
-      icon: <ShieldCheck className="w-8 h-8 text-emerald-300" />,
+      icon: <ShieldCheck className="w-12 h-12 text-emerald-300" />,
       title: "Capsule Anchoring",
       description: "Capsules are chained with cryptographic methods for rapid, trustworthy verification."
     }
@@ -168,7 +168,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
               <div>
                 <div className="flex items-center gap-3 mb-8">
                   <div className="p-2 rounded-xl bg-red-500/20">
-                    <AlertTriangle className="w-6 h-6 text-red-300" />
+                    <AlertTriangle className="w-12 h-12 text-red-300" />
                   </div>
                   <h3 className="text-2xl font-bold text-white">The Problem</h3>
                 </div>
@@ -232,7 +232,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
               <div className="opacity-30">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="p-2 rounded-xl bg-red-500/20">
-                    <AlertTriangle className="w-6 h-6 text-red-300" />
+                    <AlertTriangle className="w-12 h-12 text-red-300" />
                   </div>
                   <h3 className="text-2xl font-bold text-white">The Problem</h3>
                 </div>
@@ -265,7 +265,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
               <div>
                 <div className="flex items-center gap-3 mb-8">
                   <div className="p-2 rounded-xl bg-green-500/20">
-                    <ShieldCheck className="w-6 h-6 text-green-300" />
+                    <ShieldCheck className="w-12 h-12 text-green-300" />
                   </div>
                   <h3 className="text-2xl font-bold text-white">My Solution</h3>
                 </div>
@@ -341,7 +341,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
           className="lg:hidden flex items-center justify-center my-8"
         >
           <div className="flex items-center gap-4">
-            <ArrowRight className="w-8 h-8 text-indigo-300 rotate-90" />
+            <ArrowRight className="w-12 h-12 text-indigo-300 rotate-90" />
             <span className="text-indigo-300 font-semibold">CIAF + LCM</span>
           </div>
         </motion.div>

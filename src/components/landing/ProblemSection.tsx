@@ -31,22 +31,22 @@ interface ProblemSectionProps {
 const ProblemSection: React.FC<ProblemSectionProps> = ({ className }) => {
   const problems = [
     {
-      icon: <AlertTriangle className="w-12 h-12 text-amber-300" />,
+      icon: <AlertTriangle className="w-8 h-8 text-amber-300" />,
       title: "Descriptive ≠ Verifiable",
       description: "Model and system cards describe intent, but auditors need independent, tamper-evident proof."
     },
     {
-      icon: <GitBranch className="w-12 h-12 text-indigo-300" />,
+      icon: <GitBranch className="w-8 h-8 text-indigo-300" />,
       title: "Lineage Without Integrity",
       description: "OpenLineage tracks events; without cryptographic anchoring, evidence can be disputed."
     },
     {
-      icon: <TimerReset className="w-12 h-12 text-fuchsia-300" />,
+      icon: <TimerReset className="w-8 h-8 text-fuchsia-300" />,
       title: "Proof at Production Speed",
       description: "zkML is powerful but often heavy; we need scalable verification paths for live systems."
     },
     {
-      icon: <Lock className="w-12 h-12 text-green-300" />,
+      icon: <Lock className="w-8 h-8 text-green-300" />,
       title: "Access Control Gaps",
       description: "Without robust access controls, sensitive data can be exposed or misused."
     }
