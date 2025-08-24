@@ -45,7 +45,7 @@ const SolutionSection: React.FC<SolutionSectionProps> = ({ storageSaved, classNa
     },
     {
       icon: <ShieldCheck className="w-12 h-12 text-teal-300" />,
-      title: "Merkle Anchoring",
+      title: "Capsule Anchoring",
       description: "Capsules are chained with cryptographic commitments for rapid, trustworthy verification."
     },
     {
