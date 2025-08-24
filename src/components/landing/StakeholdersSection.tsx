@@ -75,6 +75,25 @@ const StakeholdersSection: React.FC<StakeholdersSectionProps> = ({ className }) 
           />
         ))}
       </div>
+      
+      {/* Pilot Program CTA */}
+      <div className="mt-12 text-center">
+        <div className="inline-flex flex-col items-center gap-4 p-6 rounded-3xl bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30">
+          <h3 className="text-xl font-bold text-white">Ready to Bridge the Gap?</h3>
+          <p className="text-indigo-200/80 text-sm max-w-md">
+            Join my exclusive pilot program to implement verifiable AI auditability in your organization.
+          </p>
+          <a
+            href="/pilot-request"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium transition-all transform hover:scale-105"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Request Pilot Program
+          </a>
+        </div>
+      </div>
     </section>
   );
 };

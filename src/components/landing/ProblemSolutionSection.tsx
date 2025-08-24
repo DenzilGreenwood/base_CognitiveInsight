@@ -191,22 +191,22 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
-                  className="mt-6 p-4 rounded-2xl bg-amber-600/10 border border-amber-400/30"
-                >
-                  <p className="text-amber-100/90 text-sm font-medium">
-                    In short: AI moves faster than compliance can keep up. Proof must be cryptographic, not just descriptive.
-                  </p>
-                </motion.div>
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
                   className="mt-6 p-4 rounded-2xl bg-red-600/10 border border-red-400/30"
                 >
                   <p className="text-red-100/90 text-sm">
                     <strong>Current state:</strong> AI produces outputs faster than we can prove integrity. 
                     Auditors need cryptographic evidence, not just documentation.
+                  </p>
+                </motion.div>
+                                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
+                  className="mt-6 p-4 rounded-2xl bg-amber-600/10 border border-amber-400/30"
+                >
+                  <p className="text-amber-100/90 text-sm font-medium">
+                    In short: AI moves faster than compliance can keep up. Proof must be cryptographic, not just descriptive.
                   </p>
                 </motion.div>
               </div>
@@ -292,7 +292,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
                   className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30"
                 >
                   <p className="text-indigo-100/90 text-sm">
-                    <strong>Beyond encryption & checksums:</strong> CIAF capsules provide auditable provenance — 
+                    <strong>Beyond encryption & checksums:</strong> CIAF capsules provide verifiable auditable provenance — 
                     who created data, when, and how — not just confidentiality.
                   </p>
                 </motion.div>
@@ -304,6 +304,27 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
                 >
                   <p className="text-slate-100/90 text-sm">
                     <strong>Implementation Note:</strong> Demonstration only. No sensitive data is processed. Patent-pending; cryptographic details withheld.
+                  </p>
+                </motion.div>
+                
+                {/* White Paper CTA */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
+                  className="mt-6 text-center"
+                >
+                  <a
+                    href="/white-paper"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    Request White Paper
+                  </a>
+                  <p className="text-indigo-300/80 text-sm mt-2">
+                    Learn more about the technical approach
                   </p>
                 </motion.div>
               </div>

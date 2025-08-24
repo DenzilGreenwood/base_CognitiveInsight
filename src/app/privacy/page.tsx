@@ -87,7 +87,7 @@ export default function PrivacyPage() {
               </h2>
               <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
                 <p className="text-indigo-100 mb-4">
-                  Cognitive Insight™ ("I," "my," or "the platform") is committed to protecting your privacy and maintaining 
+                  Cognitive Insight™ ("I," "me,""my," or "the platform") is committed to protecting your privacy and maintaining 
                   the highest standards of data security. This Privacy Policy explains how I collect, use, protect, 
                   and share information when you use the verifiable AI assurance platform and related services.
                 </p>
@@ -113,7 +113,7 @@ export default function PrivacyPage() {
                   <ul className="text-indigo-100 space-y-2">
                     <li><strong>Contact Information:</strong> Name, email address, organization, when you submit forms or request information</li>
                     <li><strong>Pilot Program Data:</strong> Use case descriptions, technical requirements, and organizational details for pilot evaluations</li>
-                    <li><strong>Communications:</strong> Content of emails, support requests, and feedback you send to us</li>
+                    <li><strong>Communications:</strong> Content of emails, support requests, and feedback you send to me.</li>
                     <li><strong>Professional Information:</strong> Job title, company size, industry, and relevant technical background when provided</li>
                   </ul>
                 </div>

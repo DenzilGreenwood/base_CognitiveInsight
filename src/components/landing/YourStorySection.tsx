@@ -48,7 +48,7 @@ const YourStorySection: React.FC<YourStorySectionProps> = ({ className }) => {
     {
       icon: <Sparkles className="w-12 h-12 text-indigo-300" />,
       title: "Discovery → CIAF + LCM",
-      description: "While encrypting data for an AI support tool, I discovered a scalable approach to AI auditability. This evolved into the Cognitive Insight™ Audit Framework, which includes an efficiency method called Lazy Capsule Materialization (patent-pending)."
+      description: "While encrypting data for an AI support tool, I discovered a scalable approach to AI auditability. This evolved into the Cognitive Insight™ Audit Framework, which includes an efficiency method called Lazy Capsule Materialization."
     }
   ];
 

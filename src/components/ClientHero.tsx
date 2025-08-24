@@ -20,7 +20,7 @@ export default function ClientHero() {
           Turn Confusion into <span className="text-indigo-400">Cryptographic Clarity</span>
         </motion.h1>
         <div className="text-slate-300/90 max-w-prose">
-          A patent-pending audit layer for AI systems that issues verifiable, tamper-evident receipts—without logging everything.
+          An audit layer for AI systems that issues verifiable, tamper-evident receipts—without logging everything.
         </div>
         <div className="flex flex-wrap gap-3">
           <button 

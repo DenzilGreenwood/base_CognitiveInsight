@@ -62,7 +62,7 @@ async function sendWhitePaperConfirmation(email: string, name: string, organizat
 
 Thank you for your interest in our Cognitive Insight™ white paper.
 
-We've received your request and will review it shortly. Due to the patent-pending nature of our technology, we provide the white paper after a brief qualification process.
+We've received your request and will review it shortly. Due to the proprietary nature of our technology, we provide the white paper after a brief qualification process.
 
 Our team will reach out within 24-48 hours to:
 1. Verify your request details
@@ -78,7 +78,7 @@ The Cognitive Insight Team`,
         <h2 style="color: #4F46E5;">Your Cognitive Insight™ White Paper Request</h2>
         <p>Hi ${name || 'there'},</p>
         <p>Thank you for your interest in our <strong>Cognitive Insight™</strong> white paper.</p>
-        <p>We've received your request and will review it shortly. Due to the patent-pending nature of our technology, we provide the white paper after a brief qualification process.</p>
+        <p>We've received your request and will review it shortly. Due to the proprietary nature of our technology, we provide the white paper after a brief qualification process.</p>
         
         <div style="margin: 30px 0; padding: 20px; background-color: #F3F4F6; border-radius: 8px;">
           <h3 style="color: #374151; margin-top: 0;">Next Steps</h3>
@@ -95,7 +95,7 @@ The Cognitive Insight Team`,
         <div style="margin: 30px 0; padding: 15px; background-color: #EEF2FF; border-left: 4px solid #4F46E5; border-radius: 4px;">
           <p style="margin: 0; color: #374151; font-size: 14px;">
             <strong>Note:</strong> Our white paper contains high-level design specifications and standard alignment details. 
-            Cryptographic implementations are withheld due to patent-pending status.
+            Cryptographic implementations are withheld for proprietary reasons.
           </p>
         </div>
 

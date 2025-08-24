@@ -118,7 +118,7 @@ const WhitePaperSection: React.FC<WhitePaperSectionProps> = ({ className }) => {
                 <FileText className="w-4 h-4" /> 
                 {status === "loading" ? "Submitting..." : "Request White Paper"}
               </Button>
-              <p className="text-sm text-indigo-300/80">Patent-pending. Cryptographic implementations withheld.</p>
+              <p className="text-sm text-indigo-300/80">Cryptographic implementations withheld.</p>
             </div>
 
             {/* Status Messages */}
@@ -138,7 +138,7 @@ const WhitePaperSection: React.FC<WhitePaperSectionProps> = ({ className }) => {
             <div className="sm:col-span-2 mt-4 text-xs text-indigo-300/70">
               <p>
                 <strong>Privacy Notice:</strong> Your name and email are stored only to provide updates on Cognitive Insight™ 
-                and can be deleted on request. Patent-pending. Cryptographic implementations withheld.
+                and can be deleted on request. Cryptographic implementations withheld.
               </p>
             </div>
           </form>

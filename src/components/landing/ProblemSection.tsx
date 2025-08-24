@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AlertTriangle, GitBranch, TimerReset } from "lucide-react";
+import { AlertTriangle, GitBranch, TimerReset, Lock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "./SectionHeader";
@@ -44,6 +44,11 @@ const ProblemSection: React.FC<ProblemSectionProps> = ({ className }) => {
       icon: <TimerReset className="w-12 h-12 text-fuchsia-300" />,
       title: "Proof at Production Speed",
       description: "zkML is powerful but often heavy; we need scalable verification paths for live systems."
+    },
+    {
+      icon: <Lock className="w-12 h-12 text-green-300" />,
+      title: "Access Control Gaps",
+      description: "Without robust access controls, sensitive data can be exposed or misused."
     }
   ];
 
