@@ -7,7 +7,8 @@ import {
   GaugeCircle, 
   ShieldCheck, 
   Lock,
-  ArrowRight 
+  ArrowRight,
+  ArrowUp
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -341,7 +342,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
           className="lg:hidden flex items-center justify-center my-8"
         >
           <div className="flex items-center gap-4">
-            <ArrowRight className="w-12 h-12 text-indigo-300 rotate-90" />
+            <ArrowUp className="w-12 h-12 text-indigo-300" />
             <span className="text-indigo-300 font-semibold">CIAF + LCM</span>
           </div>
         </motion.div>
