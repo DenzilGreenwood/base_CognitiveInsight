@@ -13,7 +13,9 @@ import {
   AlertCircle,
   RefreshCw,
   Eye,
-  EyeOff
+  EyeOff,
+  Trash2,
+  UserX
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,6 +44,8 @@ export default function PilotRequestsAdmin() {
   const [error, setError] = useState<string | null>(null);
   const [configMessage, setConfigMessage] = useState<string | null>(null);
   const [expandedRequest, setExpandedRequest] = useState<string | null>(null);
+  const [deletingUser, setDeletingUser] = useState<string | null>(null);
+  const [deleteSuccess, setDeleteSuccess] = useState<string | null>(null);
 
   const fetchRequests = async () => {
     setLoading(true);
@@ -100,6 +104,44 @@ export default function PilotRequestsAdmin() {
     setExpandedRequest(expandedRequest === requestId ? null : requestId);
   };
 
+  const handleDeleteUserData = async (email: string) => {
+    if (!confirm(`Are you sure you want to delete ALL data for ${email}? This action is irreversible and will remove:\n\n• Pilot program requests\n• White paper requests\n• Contact form submissions\n• Early access requests\n\nThe user will receive an email confirmation.`)) {
+      return;
+    }
+
+    setDeletingUser(email);
+    setError(null);
+    setDeleteSuccess(null);
+
+    try {
+      const response = await fetch('/api/admin/delete-user-data', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          reason: 'Admin deletion via pilot requests page'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setDeleteSuccess(`Successfully deleted ${data.totalDeleted} record(s) for ${email}. Confirmation email sent.`);
+        // Refresh the requests list to show updated data
+        await fetchRequests();
+      } else {
+        throw new Error(data.error || 'Failed to delete user data');
+      }
+    } catch (error) {
+      console.error('Error deleting user data:', error);
+      setError(error instanceof Error ? error.message : 'Failed to delete user data');
+    } finally {
+      setDeletingUser(null);
+    }
+  };
+
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-indigo-900 via-slate-900 to-slate-950 text-white">
@@ -154,6 +196,16 @@ export default function PilotRequestsAdmin() {
               <AlertCircle className="h-4 w-4 text-red-400" />
               <AlertDescription className="text-red-200">
                 {error}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Success State */}
+          {deleteSuccess && (
+            <Alert className="border-green-500/50 bg-green-500/10 mb-6">
+              <CheckCircle className="h-4 w-4 text-green-400" />
+              <AlertDescription className="text-green-200">
+                {deleteSuccess}
               </AlertDescription>
             </Alert>
           )}
@@ -259,6 +311,20 @@ export default function PilotRequestsAdmin() {
                           className="text-indigo-200 hover:text-white"
                         >
                           {expandedRequest === request.id ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteUserData(request.email)}
+                          disabled={deletingUser === request.email}
+                          className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                          title="Delete all user data (GDPR)"
+                        >
+                          {deletingUser === request.email ? (
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <UserX className="w-4 h-4" />
+                          )}
                         </Button>
                       </div>
                     </div>

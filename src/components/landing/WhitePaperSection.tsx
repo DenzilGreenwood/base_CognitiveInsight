@@ -46,7 +46,7 @@ const WhitePaperSection: React.FC<WhitePaperSectionProps> = ({ className }) => {
         return;
       }
 
-      setMessage("Thank you! I'll email the white paper after reviewing your request.");
+      setMessage("Thank you for your request. Each submission is reviewed to ensure relevance. If approved, you’ll receive the white paper and pilot details by email. This is a collaborative process—please review the material and, if it aligns, let’s consider a pilot partnership to shape the future direction together.");
       setStatus("success");
       
       // Clear form
@@ -70,8 +70,18 @@ const WhitePaperSection: React.FC<WhitePaperSectionProps> = ({ className }) => {
         title="Deeper Dive Without Giving Away the IP"
         subtitle="Get the high-level design, standard alignment, and pilot options."
       />
+    
       <Card className="mt-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur shadow-lg">
         <CardContent className="p-6">
+            <div className="p-4">
+            <p>
+              Please provide your details below to request access.            
+            </p>
+            <p className="sm:col-span-2 mt-4 text-sm text-indigo-300/70">
+              White papers are shared selectively with interested regulators, auditors, and AI partners to ensure alignment and constructive feedback.
+            </p>
+
+          </div>
           <form className="grid sm:grid-cols-2 gap-4" onSubmit={handleSubmit}>
             <div>
               <Label htmlFor="name" className="block text-sm text-indigo-200">Name</Label>
@@ -118,7 +128,7 @@ const WhitePaperSection: React.FC<WhitePaperSectionProps> = ({ className }) => {
                 <FileText className="w-4 h-4" /> 
                 {status === "loading" ? "Submitting..." : "Request White Paper"}
               </Button>
-              <p className="text-sm text-indigo-300/80">Cryptographic implementations withheld.</p>
+              <p className="text-sm text-indigo-300/80">By requesting this white paper, you agree to our terms and conditions.</p>
             </div>
 
             {/* Status Messages */}
@@ -138,8 +148,10 @@ const WhitePaperSection: React.FC<WhitePaperSectionProps> = ({ className }) => {
             <div className="sm:col-span-2 mt-4 text-xs text-indigo-300/70">
               <p>
                 <strong>Privacy Notice:</strong> Your name and email are stored only to provide updates on Cognitive Insight™ 
-                and can be deleted on request. Cryptographic implementations withheld.
+                and can be deleted on request. 
               </p>
+              <p><strong> Important Notice:</strong> The white paper provides a high-level overview for regulators, compliance professionals, and AI teams. It <strong>does not include</strong> cryptographic implementations.</p>
+              
             </div>
           </form>
         </CardContent>

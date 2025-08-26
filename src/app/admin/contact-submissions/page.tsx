@@ -15,7 +15,8 @@ import {
   EyeOff,
   Tag,
   User,
-  ArrowLeft
+  ArrowLeft,
+  UserX
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,6 +46,8 @@ export default function ContactSubmissionsAdmin() {
   const [error, setError] = useState<string | null>(null);
   const [configMessage, setConfigMessage] = useState<string | null>(null);
   const [expandedSubmission, setExpandedSubmission] = useState<string | null>(null);
+  const [deletingUser, setDeletingUser] = useState<string | null>(null);
+  const [deleteSuccess, setDeleteSuccess] = useState<string | null>(null);
 
   const fetchSubmissions = async () => {
     setLoading(true);
@@ -102,6 +105,44 @@ export default function ContactSubmissionsAdmin() {
     setExpandedSubmission(expandedSubmission === submissionId ? null : submissionId);
   };
 
+  const handleDeleteUserData = async (email: string) => {
+    if (!confirm(`Are you sure you want to delete ALL data for ${email}? This action is irreversible and will remove:\n\n• Pilot program requests\n• White paper requests\n• Contact form submissions\n• Early access requests\n\nThe user will receive an email confirmation.`)) {
+      return;
+    }
+
+    setDeletingUser(email);
+    setError(null);
+    setDeleteSuccess(null);
+
+    try {
+      const response = await fetch('/api/admin/delete-user-data', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          reason: 'Admin deletion via contact submissions page'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setDeleteSuccess(`Successfully deleted ${data.totalDeleted} record(s) for ${email}. Confirmation email sent.`);
+        // Refresh the submissions list to show updated data
+        await fetchSubmissions();
+      } else {
+        throw new Error(data.error || 'Failed to delete user data');
+      }
+    } catch (error) {
+      console.error('Error deleting user data:', error);
+      setError(error instanceof Error ? error.message : 'Failed to delete user data');
+    } finally {
+      setDeletingUser(null);
+    }
+  };
+
   const getSubmissionsByCategory = () => {
     const categories = submissions.reduce((acc, submission) => {
       acc[submission.category] = (acc[submission.category] || 0) + 1;
@@ -146,6 +187,18 @@ export default function ContactSubmissionsAdmin() {
               </Button>
               <h1 className="text-4xl font-bold mb-2">Contact Submissions</h1>
               <p className="text-indigo-200">Manage and track contact form submissions</p>
+              
+              {deleteSuccess && (
+                <div className="mt-4 p-4 bg-green-500/20 border border-green-400 text-green-300 rounded-lg">
+                  {deleteSuccess}
+                </div>
+              )}
+              
+              {error && (
+                <div className="mt-4 p-4 bg-red-500/20 border border-red-400 text-red-300 rounded-lg">
+                  {error}
+                </div>
+              )}
             </div>
             <Button
               onClick={fetchSubmissions}
@@ -301,6 +354,20 @@ export default function ContactSubmissionsAdmin() {
                           className="text-indigo-200 hover:text-white"
                         >
                           {expandedSubmission === submission.id ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteUserData(submission.email)}
+                          disabled={deletingUser === submission.email}
+                          className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                          title="Delete all user data (GDPR compliance)"
+                        >
+                          {deletingUser === submission.email ? (
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <UserX className="w-4 h-4" />
+                          )}
                         </Button>
                       </div>
                     </div>
