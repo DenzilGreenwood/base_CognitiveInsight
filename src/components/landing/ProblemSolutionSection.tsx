@@ -119,7 +119,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
     {
       icon: <GaugeCircle className="w-12 h-12 text-emerald-300" />,
       title: "LCM Efficiency",
-      description: `Generate capsules on demand. My internal tests show ~${formatPercent(storageSaved)} storage reduction.`
+      description: `Generate capsules on demand. These numbers come from internal simulations — one goal of the pilot program is to validate and refine them in real-world conditions with your input.`
     },
     {
       icon: <ShieldCheck className="w-12 h-12 text-emerald-300" />,
@@ -131,9 +131,9 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
   return (
     <section className={cn("container mx-auto px-6 py-16 md:py-24 max-w-7xl", className)}>
       <SectionHeader
-        kicker="The Challenge & My Answer"
+        kicker="The Challenge & Our Collective Answer"
         title="From AI Audit Confusion to Cryptographic Clarity"
-        subtitle="Today's compliance is descriptive. Tomorrow's needs to be verifiable."
+        subtitle="In my experience, compliance today is descriptive. Tomorrow's needs to be verifiable. Regulators, auditors, and engineers often work in silos — and that slows trust. These are the challenges I believe we can solve together."
       />
       
       {/* Timer and Toggle Controls */}
@@ -196,8 +196,8 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
                   className="mt-6 p-4 rounded-2xl bg-red-600/10 border border-red-400/30"
                 >
                   <p className="text-red-100/90 text-sm">
-                    <strong>Current state:</strong> AI produces outputs faster than we can prove integrity. 
-                    Auditors need cryptographic evidence, not just documentation.
+                    <strong>These challenges aren't unique to one group</strong> — regulators, compliance teams, and AI practitioners have often worked in silos. 
+                    Historically, priorities diverged and collaboration suffered. That's why we're focusing on building a shared foundation for trust.
                   </p>
                 </motion.div>
                                 <motion.div 
@@ -268,7 +268,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
                   <div className="p-2 rounded-xl bg-green-500/20">
                     <ShieldCheck className="w-12 h-12 text-green-300" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white">My Solution</h3>
+                  <h3 className="text-2xl font-bold text-white">The Approach I'm Developing — With Your Input</h3>
                 </div>
                 <div className="space-y-6">
                   {solutions.map((solution, index) => (
@@ -293,7 +293,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
                   className="mt-6 p-4 rounded-2xl bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-400/30"
                 >
                   <p className="text-indigo-100/90 text-sm">
-                    <strong>Beyond encryption & checksums:</strong> CIAF capsules provide verifiable auditable provenance — 
+                    <strong>Beyond encryption & checksums:</strong> CIAF capsules aim to provide verifiable provenance — 
                     who created data, when, and how — not just confidentiality.
                   </p>
                 </motion.div>
@@ -325,7 +325,7 @@ const ProblemSolutionSection: React.FC<ProblemSolutionSectionProps> = ({ storage
                     Request White Paper
                   </a>
                   <p className="text-indigo-300/80 text-sm mt-2">
-                    Learn more about the technical approach
+                    Request the white paper and consider whether a pilot makes sense for your organization. This is not a finished product — it's a co-design effort to ensure verifiable AI auditability works in practice.
                   </p>
                 </motion.div>
               </div>

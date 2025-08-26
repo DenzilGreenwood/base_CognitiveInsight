@@ -4,7 +4,7 @@ import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: 'CognitiveInsight',
-  description: 'Verifiable AI Assurance Platform',
+  description: 'Collaborative Verifiable AI Auditability Platform',
 };
 
 export default function RootLayout({

@@ -15,7 +15,8 @@ import {
   Eye,
   EyeOff,
   Trash2,
-  UserX
+  UserX,
+  Shield
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,6 +36,8 @@ interface PilotRequest {
   followUpScheduled: boolean;
   ipAddress?: string;
   userAgent?: string;
+  agreementAccepted?: boolean;
+  agreementAcceptedAt?: string;
 }
 
 export default function PilotRequestsAdmin() {
@@ -211,7 +214,7 @@ export default function PilotRequestsAdmin() {
           )}
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <Card className="bg-white/5 border-white/10">
               <CardContent className="p-4">
                 <div className="flex items-center">
@@ -246,6 +249,20 @@ export default function PilotRequestsAdmin() {
                     <p className="text-sm text-indigo-200">In Progress</p>
                     <p className="text-2xl font-bold">
                       {requests.filter(r => r.status === 'in_progress').length}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/5 border-white/10">
+              <CardContent className="p-4">
+                <div className="flex items-center">
+                  <Shield className="w-8 h-8 text-green-400" />
+                  <div className="ml-3">
+                    <p className="text-sm text-indigo-200">Agreements Signed</p>
+                    <p className="text-2xl font-bold">
+                      {requests.filter(r => r.agreementAccepted).length}
                     </p>
                   </div>
                 </div>
@@ -304,6 +321,12 @@ export default function PilotRequestsAdmin() {
                       </div>
                       <div className="flex items-center space-x-2">
                         {getStatusBadge(request.status)}
+                        {request.agreementAccepted && (
+                          <Badge variant="outline" className="border-green-500/50 text-green-400">
+                            <Shield className="w-3 h-3 mr-1" />
+                            Agreement Signed
+                          </Badge>
+                        )}
                         <Button
                           variant="ghost"
                           size="sm"
@@ -376,6 +399,15 @@ export default function PilotRequestsAdmin() {
                             <div>
                               <span className="text-white font-medium">IP Address:</span>
                               <span className="text-indigo-200 ml-2">{request.ipAddress}</span>
+                            </div>
+                          )}
+                          {request.agreementAccepted && (
+                            <div className="md:col-span-2">
+                              <span className="text-white font-medium">Partnership Agreement:</span>
+                              <span className="text-green-400 ml-2 flex items-center">
+                                <Shield className="w-3 h-3 mr-1" />
+                                Accepted on {request.agreementAcceptedAt ? formatDate(request.agreementAcceptedAt) : 'Unknown date'}
+                              </span>
                             </div>
                           )}
                         </div>

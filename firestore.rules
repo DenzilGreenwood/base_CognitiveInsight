@@ -13,5 +13,17 @@ service cloud.firestore {
       allow read: if false;              // No client reads
       allow write: if false;             // Only Functions can write (server-side)
     }
+
+    // Pilot requests collection - server-side only
+    match /pilot-requests/{doc} {
+      allow read: if false;              // No client reads - admin API only
+      allow write: if false;             // Only Functions can write (server-side)
+    }
+
+    // Contact submissions collection - server-side only
+    match /contact-submissions/{doc} {
+      allow read: if false;              // No client reads - admin API only
+      allow write: if false;             // Only Functions can write (server-side)
+    }
   }
 }

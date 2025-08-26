@@ -172,11 +172,12 @@ export default function ContactPage() {
             </Button>
             
             <h1 className="text-4xl font-bold mb-4">
-              Contact Me
+              Let's Explore Collaboration
             </h1>
             <p className="text-indigo-200 text-lg">
-              Get in touch directly with me. I'm here to help you understand how 
-              Cognitive Insight™ can provide verifiable AI assurance for your organization.
+              Get in touch to explore how we can work together on verifiable AI auditability. 
+              Whether you're a regulator, auditor, or AI company, I'm here to understand your 
+              challenges and discuss collaborative opportunities.
             </p>
           </div>
 
@@ -191,7 +192,7 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-white mb-2">Email Me</h3>
                       <p className="text-indigo-200 text-sm mb-2">
-                        For general inquiries and support
+                        For urgent or direct questions
                       </p>
                       <a 
                         href="mailto:insight@cognitiveinsight.ai" 
@@ -246,7 +247,7 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-white mb-2">Get Support</h3>
                       <p className="text-indigo-200 text-sm mb-2">
-                        Technical questions and pilot program inquiries
+                        For detailed inquiries, pilot interest, or support
                       </p>
                       <p className="text-indigo-300 text-sm">
                         Use the form to get detailed assistance
@@ -338,11 +339,10 @@ export default function ContactPage() {
                           </SelectTrigger>
                           <SelectContent className="bg-white border-white text-black">
                             <SelectItem value="general">General Inquiry</SelectItem>
-                            <SelectItem value="pilot">Pilot Program</SelectItem>
-                            <SelectItem value="technical">Technical Questions</SelectItem>
-                            <SelectItem value="partnership">Partnership</SelectItem>
-                            <SelectItem value="media">Media & Press</SelectItem>
-                            <SelectItem value="support">Technical Support</SelectItem>
+                            <SelectItem value="pilot">Pilot Program Interest</SelectItem>
+                            <SelectItem value="technical">Technical Question</SelectItem>
+                            <SelectItem value="collaboration">Collaboration Opportunity</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -373,7 +373,7 @@ export default function ContactPage() {
                         value={formData.message}
                         onChange={(e) => handleInputChange('message', e.target.value)}
                         className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-h-[150px]"
-                        placeholder="Tell me about your inquiry, requirements, or how I can help you..."
+                        placeholder="Tell me about your role, challenges, or how we might collaborate on verifiable AI auditability..."
                       />
                       {errors.message && (
                         <p className="text-red-400 text-sm">{errors.message}</p>
@@ -417,7 +417,7 @@ export default function ContactPage() {
                       ) : (
                         <>
                           <Send className="w-4 h-4 mr-2" />
-                          Send Message
+                          Start the Conversation
                         </>
                       )}
                     </Button>
@@ -438,23 +438,23 @@ export default function ContactPage() {
                 <div>
                   <h4 className="font-semibold text-white mb-2">What is Cognitive Insight™?</h4>
                   <p className="text-indigo-200 text-sm">
-                    Cognitive Insight™ is a verifiable AI assurance platform that provides cryptographic 
-                    proof of AI system integrity and compliance.
+                    Cognitive Insight™ brings regulators, auditors, and AI companies together to co-create 
+                    verifiable foundations for AI auditability through cryptographic proof methods.
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-white mb-2">How can I join the pilot program?</h4>
+                  <h4 className="font-semibold text-white mb-2">How can I join the collaborative pilot?</h4>
                   <p className="text-indigo-200 text-sm">
                     Contact me through this form or visit my{" "}
                     <a href="/pilot-request" className="text-indigo-300 underline">pilot request page</a> 
-                    {" "}to apply directly.
+                    {" "}to explore partnership opportunities and co-design possibilities.
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-white mb-2">Do you provide technical support?</h4>
+                  <h4 className="font-semibold text-white mb-2">How is this different from a typical product trial?</h4>
                   <p className="text-indigo-200 text-sm">
-                    Yes, I provide comprehensive technical support for pilot program participants 
-                    and enterprise customers.
+                    This isn't just a product trial—it's a co-design effort where your domain expertise 
+                    helps refine verifiable AI auditability to work across different contexts and requirements.
                   </p>
                 </div>
               </CardContent>
@@ -470,8 +470,8 @@ export default function ContactPage() {
                   href="/pilot-request" 
                   className="block p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
                 >
-                  <div className="font-semibold text-white">Pilot Program</div>
-                  <div className="text-indigo-200 text-sm">Apply for early access</div>
+                  <div className="font-semibold text-white">Collaborative Pilot</div>
+                  <div className="text-indigo-200 text-sm">Join our co-design partnership</div>
                 </a>
                 <a 
                   href="/white-paper" 

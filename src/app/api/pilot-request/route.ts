@@ -181,6 +181,7 @@ Email: ${submissionData.email}
 Organization: ${submissionData.organization}
 Pilot Scope: ${submissionData.pilotScope || 'Not specified'}
 Use Case: ${submissionData.useCase || 'Not specified'}
+Partnership Agreement: ${submissionData.agreementAccepted ? 'ACCEPTED' : 'NOT ACCEPTED'} on ${submissionData.agreementAcceptedAt}
 Source: ${submissionData.source}
 IP Address: ${submissionData.ipAddress}
 Submitted: ${new Date().toISOString()}
@@ -215,6 +216,12 @@ This is a high-value lead requiring immediate follow-up for pilot program scopin
           <tr>
             <td style="padding: 8px; border-bottom: 1px solid #E5E7EB; font-weight: bold;">Use Case:</td>
             <td style="padding: 8px; border-bottom: 1px solid #E5E7EB;">${submissionData.useCase || 'Not specified'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #E5E7EB; font-weight: bold;">Partnership Agreement:</td>
+            <td style="padding: 8px; border-bottom: 1px solid #E5E7EB;">
+              <span style="color: #10B981; font-weight: bold;">✓ ACCEPTED</span> on ${new Date(submissionData.agreementAcceptedAt).toLocaleString()}
+            </td>
           </tr>
           <tr>
             <td style="padding: 8px; border-bottom: 1px solid #E5E7EB; font-weight: bold;">Source:</td>
@@ -285,7 +292,7 @@ export async function POST(request: NextRequest) {
 
     // Parse and validate request body
     const body = await request.json();
-    const { email, name, organization, pilotScope, useCase, source } = body;
+    const { email, name, organization, pilotScope, useCase, source, agreementAccepted } = body;
 
     // Validate required fields
     if (!email || typeof email !== 'string') {
@@ -305,6 +312,14 @@ export async function POST(request: NextRequest) {
     if (!organization || typeof organization !== 'string') {
       return NextResponse.json(
         { error: "Organization is required for pilot requests" }, 
+        { status: 400 }
+      );
+    }
+
+    // Validate agreement acceptance
+    if (!agreementAccepted || agreementAccepted !== true) {
+      return NextResponse.json(
+        { error: "You must accept the Pilot Collaboration Agreement to proceed" }, 
         { status: 400 }
       );
     }
@@ -334,6 +349,8 @@ export async function POST(request: NextRequest) {
       organization: sanitizeInput(String(organization)).substring(0, 200),
       pilotScope: pilotScope ? sanitizeInput(String(pilotScope)).substring(0, 500) : null,
       useCase: useCase ? sanitizeInput(String(useCase)).substring(0, 500) : null,
+      agreementAccepted: true,
+      agreementAcceptedAt: new Date().toISOString(),
       submittedAt: new Date().toISOString(),
       source: source || "pilot-request",
       ipAddress: clientIP,

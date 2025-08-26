@@ -57,7 +57,7 @@ const YourStorySection: React.FC<YourStorySectionProps> = ({ className }) => {
       <SectionHeader
         kicker="Origin"
         title="From Middle-School Ciphers to Verifiable AI"
-        subtitle="A lifelong thread: solving local problems that reveal global opportunity."
+        subtitle="A lifelong thread: solving local problems that reveal global opportunity. Your experience bridges what I've learned with what's needed."
       />
       <div className="mt-10 grid md:grid-cols-2 gap-6">
         {storyItems.map((item, index) => (
@@ -68,6 +68,18 @@ const YourStorySection: React.FC<YourStorySectionProps> = ({ className }) => {
             description={item.description}
           />
         ))}
+      </div>
+      
+      {/* Why Your Input Matters Bridge */}
+      <div className="mt-12 text-center">
+        <div className="inline-flex flex-col items-center gap-4 p-6 rounded-3xl bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border border-blue-400/30 max-w-2xl">
+          <h3 className="text-xl font-bold text-white">Why Your Input Matters</h3>
+          <p className="text-blue-200/80 text-sm">
+            My background bridges technical and regulatory worlds, but real-world implementation 
+            requires perspectives from your domain. Together, we can ensure verifiable AI auditability 
+            works across different contexts and requirements.
+          </p>
+        </div>
       </div>
     </section>
   );

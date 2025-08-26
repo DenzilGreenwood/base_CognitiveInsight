@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator";
 export default function PrivacyPage() {
   const router = useRouter();
 
-  const lastUpdated = "August 23, 2025";
+  const lastUpdated = "August 26, 2025"; // updated from August 23, 2025 Updated the privacy to be from the founders perspective as currently I am the only person employeed
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-indigo-900 via-slate-900 to-slate-950 text-white">
@@ -112,7 +112,7 @@ export default function PrivacyPage() {
                   <h3 className="text-lg font-semibold text-white mb-3">Information You Provide Directly</h3>
                   <ul className="text-indigo-100 space-y-2">
                     <li><strong>Contact Information:</strong> Name, email address, organization, when you submit forms or request information</li>
-                    <li><strong>Pilot Program Data:</strong> Use case descriptions, technical requirements, and organizational details for pilot evaluations</li>
+                    <li><strong>Pilot Program Data:</strong> Information you choose to share (such as use case descriptions, technical requirements, or organizational details) when applying for pilot evaluations</li>
                     <li><strong>Communications:</strong> Content of emails, support requests, and feedback you send to me.</li>
                     <li><strong>Professional Information:</strong> Job title, company size, industry, and relevant technical background when provided</li>
                   </ul>
@@ -276,7 +276,7 @@ export default function PrivacyPage() {
               <h2 className="text-2xl font-bold text-white mb-4">Third-Party Services</h2>
               <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
                 <p className="text-indigo-100 mb-4">
-                  We use carefully selected third-party services to enhance our platform. Each service is 
+                  I use carefully selected third-party services to enhance my platform. Each service is 
                   evaluated for privacy compliance and data security:
                 </p>
                 <div className="space-y-4">
@@ -284,6 +284,7 @@ export default function PrivacyPage() {
                     <h3 className="text-lg font-semibold text-white mb-2">Google Analytics</h3>
                     <p className="text-indigo-100 text-sm">
                       Used for website analytics and performance monitoring. Data is anonymized and aggregated. 
+                      I do not combine analytics data with personally identifiable information.
                       You can opt-out using browser settings or Google's opt-out tools.
                     </p>
                   </div>
@@ -312,8 +313,8 @@ export default function PrivacyPage() {
               <h2 className="text-2xl font-bold text-white mb-4">International Data Transfers</h2>
               <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
                 <p className="text-indigo-100 mb-4">
-                  Your data may be processed and stored in the United States and other countries where we 
-                  or our service providers operate. We ensure appropriate safeguards are in place:
+                  Your data may be processed and stored in the United States and other countries where I 
+                  or my service providers operate. I ensure appropriate safeguards are in place:
                 </p>
                 <ul className="text-indigo-100 space-y-2">
                   <li>• Standard Contractual Clauses (SCCs) for EU data transfers</li>
@@ -330,10 +331,10 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4">Children's Privacy</h2>
               <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
-                <p className="text-indigo-100">
-                  Our services are not intended for children under 13 years of age. We do not knowingly 
-                  collect personal information from children under 13. If you believe we have collected 
-                  information from a child under 13, please contact us immediately so we can delete 
+                <p className="text-indigo-100 mb-4">
+                  Our services are not intended for children under 13 years of age. I do not knowingly 
+                  collect personal information from children under 13. If you believe I have collected 
+                  information from a child under 13, please contact me immediately so I can delete 
                   such information.
                 </p>
               </div>
@@ -346,8 +347,8 @@ export default function PrivacyPage() {
               <h2 className="text-2xl font-bold text-white mb-4">Policy Updates</h2>
               <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
                 <p className="text-indigo-100 mb-4">
-                  We may update this Privacy Policy periodically to reflect changes in our practices, 
-                  technology, or legal requirements. We will:
+                  I may update this Privacy Policy periodically to reflect changes in my practices, 
+                  technology, or legal requirements. I will:
                 </p>
                 <ul className="text-indigo-100 space-y-2 mb-4">
                   <li>• Post the updated policy on our website</li>
@@ -356,7 +357,7 @@ export default function PrivacyPage() {
                   <li>• Provide a clear summary of changes made</li>
                 </ul>
                 <p className="text-indigo-100">
-                  Your continued use of our services after any updates constitutes acceptance of the revised policy.
+                  Your continued use of my services after any updates constitutes acceptance of the revised policy.
                 </p>
               </div>
             </section>
@@ -367,16 +368,16 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
                 <Mail className="w-6 h-6 mr-2 text-indigo-400" />
-                Contact Us
+                Contact Me
               </h2>
               <div className="bg-white/5 border-white/10 rounded-lg p-6 backdrop-blur">
                 <p className="text-indigo-100 mb-4">
-                  If you have questions about this Privacy Policy or our data practices, please contact us:
+                  If you have questions about this Privacy Policy or my data practices, please contact me:
                 </p>
                 <div className="space-y-2 text-indigo-100">
                   <p><strong>Email:</strong> <a href="mailto:privacy@cognitiveinsight.ai" className="text-indigo-200 underline">privacy@cognitiveinsight.ai</a></p>
                   <p><strong>General Inquiries:</strong> <a href="mailto:insight@cognitiveinsight.ai" className="text-indigo-200 underline">insight@cognitiveinsight.ai</a></p>
-                  <p><strong>Data Protection Officer:</strong> Available upon request</p>
+                  <p><strong>Data Protection Officer:</strong> A Data Protection Officer can be designated if required by applicable law</p>
                 </div>
                 <div className="mt-4 p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
                   <p className="text-indigo-200 text-sm">
@@ -399,7 +400,7 @@ export default function PrivacyPage() {
                 Return to Homepage
               </Button>
               <p className="text-indigo-300 text-sm text-center">
-                Questions about privacy? Contact us at{" "}
+                Questions about privacy? Contact me at{" "}
                 <a href="mailto:privacy@cognitiveinsight.ai" className="text-indigo-200 underline">
                   privacy@cognitiveinsight.ai
                 </a>

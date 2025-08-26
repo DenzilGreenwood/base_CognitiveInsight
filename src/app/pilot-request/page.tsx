@@ -13,10 +13,11 @@ import {
   AlertCircle,
   Loader2
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"      
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -26,12 +27,14 @@ interface FormData {
   organization: string;
   pilotScope: string;
   useCase: string;
+  agreementAccepted: boolean;
 }
 
 interface FormErrors {
   name?: string;
   email?: string;
   organization?: string;
+  agreementAccepted?: string;
 }
 
 export default function PilotRequestPage() {
@@ -41,7 +44,8 @@ export default function PilotRequestPage() {
     email: "",
     organization: "",
     pilotScope: "",
-    useCase: ""
+    useCase: "",
+    agreementAccepted: false
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,11 +69,15 @@ export default function PilotRequestPage() {
       newErrors.organization = "Organization is required";
     }
 
+    if (!formData.agreementAccepted) {
+      newErrors.agreementAccepted = "You must agree to the Pilot Collaboration Agreement";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
+  const handleInputChange = (field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field as keyof FormErrors]) {
@@ -164,12 +172,38 @@ export default function PilotRequestPage() {
             </Button>
             
             <h1 className="text-4xl font-bold mb-4">
-              Request Pilot Program Access
+              Apply for a Collaborative Pilot Role
             </h1>
             <p className="text-indigo-200 text-lg">
-              Join my exclusive pilot program to explore how Cognitive Insight™ can provide 
-              verifiable AI assurance for your organization.
+              A limited 2025 program to co-design verifiable AI auditability with regulators, auditors, and AI teams.
             </p>
+          </div>
+
+          {/* Who We're Inviting Section */}
+          <div className="mb-8">
+            <Card className="bg-white/5 border-white/10 backdrop-blur">
+              <CardContent className="p-6">
+                <h2 className="text-xl font-bold text-white mb-4 text-center">Who We're Inviting</h2>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-400/20">
+                    <h3 className="font-semibold text-white mb-2">Regulators</h3>
+                    <p className="text-blue-200 text-sm">Observer & Standards Guide. Help define what counts as verifiable evidence and ensure alignment with regulatory intent.</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-green-500/10 border border-green-400/20">
+                    <h3 className="font-semibold text-white mb-2">Auditors & Compliance Teams</h3>
+                    <p className="text-green-200 text-sm">Evaluator & Process Integrator. Test capsules in assurance workflows and validate their value for audits.</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-400/20">
+                    <h3 className="font-semibold text-white mb-2">AI / IT / ML Teams</h3>
+                    <p className="text-purple-200 text-sm">Builder & Validator. Implement and stress-test capsule generation in real pipelines.</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-400/20">
+                    <h3 className="font-semibold text-white mb-2">Together</h3>
+                    <p className="text-indigo-200 text-sm">Co-Creators of the Standard. Share findings across groups to refine CIAF + LCM into a trusted framework.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Form Card */}
@@ -243,28 +277,28 @@ export default function PilotRequestPage() {
                 <div className="space-y-2">
                   <Label htmlFor="pilotScope" className="text-white flex items-center">
                     <FileText className="w-4 h-4 mr-2" />
-                    Pilot Scope (Optional)
+                    Your Role & Context (Optional)
                   </Label>
                   <Textarea
                     id="pilotScope"
                     value={formData.pilotScope}
                     onChange={(e) => handleInputChange('pilotScope', e.target.value)}
                     className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-h-[100px]"
-                    placeholder="Brief description of your intended pilot use case..."
+                    placeholder="Regulator, Auditor, AI/IT/ML, or Other - please describe your role and context..."
                   />
                 </div>
 
                 {/* Use Case Field */}
                 <div className="space-y-2">
                   <Label htmlFor="useCase" className="text-white">
-                    Detailed Use Case (Optional)
+                    How Can We Collaborate? (Optional)
                   </Label>
                   <Textarea
                     id="useCase"
                     value={formData.useCase}
                     onChange={(e) => handleInputChange('useCase', e.target.value)}
                     className="bg-white/10 border-white/20 text-white placeholder:text-white/50 min-h-[120px]"
-                    placeholder="Tell me more about your specific requirements, challenges, or compliance needs..."
+                    placeholder="What expertise, challenges, or requirements would you bring to a collaborative pilot? What outcomes would define success in your domain?"
                   />
                 </div>
 
@@ -283,8 +317,37 @@ export default function PilotRequestPage() {
                   <p className="text-sm text-indigo-200">
                     <strong>Privacy Notice:</strong> By submitting this form, you consent to Cognitive Insight™ 
                     processing your information to evaluate pilot program fit and provide program updates. 
-                    I comply with GDPR and never share personal data with third parties.
+                    Your information will only be used for pilot evaluation and communication. I never share personal data with third parties.
                   </p>
+                </div>
+
+                {/* Agreement Acceptance */}
+                <div className="space-y-2">
+                  <div className="flex items-start space-x-3">
+                    <Checkbox
+                      id="agreementAccepted"
+                      checked={formData.agreementAccepted}
+                      onCheckedChange={(checked) => handleInputChange('agreementAccepted', checked as boolean)}
+                      className="mt-1"
+                    />
+                    <div className="flex-1">
+                      <Label htmlFor="agreementAccepted" className="text-white text-sm cursor-pointer">
+                        I have read and agree to the{" "}
+                        <a 
+                          href="/partnership-agreement" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-indigo-200 underline hover:text-indigo-100"
+                        >
+                          Pilot Collaboration Agreement
+                        </a>
+                        {" "}*
+                      </Label>
+                      {errors.agreementAccepted && (
+                        <p className="text-red-400 text-sm mt-1">{errors.agreementAccepted}</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Submit Button */}
@@ -296,23 +359,40 @@ export default function PilotRequestPage() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Submitting Request...
+                      Submitting Application...
                     </>
                   ) : (
-                    'Submit Pilot Request'
+                    'Apply for Pilot Role'
                   )}
                 </Button>
               </form>
             </CardContent>
           </Card>
 
+          {/* Partnership Agreement Notice */}
+          <div className="mt-6 text-center">
+            <div className="bg-white/5 border-white/10 rounded-lg p-4 backdrop-blur">
+              <p className="text-indigo-200 text-sm">
+                <strong>Before applying:</strong> Please review the{" "}
+                <a 
+                  href="/partnership-agreement" 
+                  className="text-indigo-100 underline hover:text-indigo-50"
+                >
+                  Pilot Collaboration Agreement
+                </a>
+                {" "}to understand the terms of our collaborative partnership.
+              </p>
+            </div>
+          </div>
+
           {/* Additional Info */}
           <div className="mt-8 text-center">
             <p className="text-indigo-300 text-sm">
-              Questions? Contact me at{" "}
+              Questions before applying? Reach out directly at{" "}
               <a href="mailto:insight@cognitiveinsight.ai" className="text-indigo-200 underline">
                 insight@cognitiveinsight.ai
               </a>
+              {" "}— I personally review each inquiry.
             </p>
           </div>
         </motion.div>
