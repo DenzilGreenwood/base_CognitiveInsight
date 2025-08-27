@@ -2,28 +2,157 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return request.auth != null && 
+             request.auth.token.admin == true;
+    }
+
+    // Helper function to check if user is pilot participant
+    function isPilotParticipant(pilotId) {
+      return request.auth != null &&
+             exists(/databases/$(database)/documents/pilots/$(pilotId)/participants/$(request.auth.uid));
+    }
+
+    // Helper function to get user role in pilot
+    function getUserRole(pilotId) {
+      return get(/databases/$(database)/documents/pilots/$(pilotId)/participants/$(request.auth.uid)).data.role;
+    }
+
     // No public reads of leads by default
     match /leads/{doc} {
-      allow read: if false;              // change to role-gated if you add an admin portal
+      allow read: if isAdmin();          // Admin access for portal
       allow write: if false;             // block direct client writes
     }
 
     // Early access collection for Firebase Functions
     match /early_access/{doc} {
-      allow read: if false;              // No client reads
+      allow read: if isAdmin();          // Admin access for portal
       allow write: if false;             // Only Functions can write (server-side)
     }
 
-    // Pilot requests collection - server-side only
-    match /pilot-requests/{doc} {
-      allow read: if false;              // No client reads - admin API only
+    // Pilot requests collection - admin and applicant access
+    match /pilotRequests/{requestId} {
+      allow read: if isAdmin() || 
+                     (request.auth != null && 
+                      request.auth.token.email == resource.data.email);
       allow write: if false;             // Only Functions can write (server-side)
+      
+      // Audit trail - append only
+      match /audit/{auditId} {
+        allow read: if isAdmin();
+        allow create: if isAdmin();      // Admins can append audit entries
+        allow update, delete: if false;  // No modifications to audit log
+      }
     }
 
-    // Contact submissions collection - server-side only
+    // Contact submissions collection - admin only
     match /contact-submissions/{doc} {
-      allow read: if false;              // No client reads - admin API only
+      allow read: if isAdmin();          // Admin access for portal
       allow write: if false;             // Only Functions can write (server-side)
+    }
+
+    // Pilots collection - participant access with role-based restrictions
+    match /pilots/{pilotId} {
+      allow read: if isAdmin() || isPilotParticipant(pilotId);
+      allow write: if isAdmin();         // Only admins can modify pilot structure
+      
+      // Participants subcollection
+      match /participants/{userId} {
+        allow read: if isAdmin() || 
+                       isPilotParticipant(pilotId);
+        allow write: if isAdmin();
+      }
+      
+      // Milestones - all participants can read, assigned users can update
+      match /milestones/{milestoneId} {
+        allow read: if isAdmin() || isPilotParticipant(pilotId);
+        allow write: if isAdmin() || 
+                        (isPilotParticipant(pilotId) && 
+                         request.auth.uid == resource.data.ownerUserId);
+      }
+      
+      // Deliverables - role-based access
+      match /deliverables/{deliverableId} {
+        allow read: if isAdmin() || 
+                       (isPilotParticipant(pilotId) && 
+                        (resource.data.role == null || 
+                         getUserRole(pilotId) == resource.data.role));
+        allow write: if isAdmin() || 
+                        (isPilotParticipant(pilotId) && 
+                         getUserRole(pilotId) == resource.data.role);
+      }
+      
+      // Meeting logs - all participants can read, admins and meeting owners can write
+      match /meetings/{meetingId} {
+        allow read: if isAdmin() || isPilotParticipant(pilotId);
+        allow write: if isAdmin() || 
+                        (isPilotParticipant(pilotId) && 
+                         request.auth.uid == resource.data.createdBy);
+      }
+      
+      // Audit trail - read for participants, append only for admins
+      match /audit/{auditId} {
+        allow read: if isAdmin() || isPilotParticipant(pilotId);
+        allow create: if isAdmin() || isPilotParticipant(pilotId);
+        allow update, delete: if false;  // No modifications to audit log
+      }
+      
+      // Activity logs - read for participants
+      match /activity/{activityId} {
+        allow read: if isAdmin() || isPilotParticipant(pilotId);
+        allow create: if isAdmin() || isPilotParticipant(pilotId);
+        allow update, delete: if false;
+      }
+    }
+
+    // Global configurations - admin only
+    match /globalConfigs/{configId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // SLA tracking - admin only
+    match /slas/{slaId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Consent records - admin and subject access
+    match /consents/{consentId} {
+      allow read: if isAdmin() || 
+                     (request.auth != null && 
+                      request.auth.token.email == resource.data.subjectEmail);
+      allow write: if false;             // Only Functions can write
+    }
+
+    // Call logs - admin and participants
+    match /callLogs/{logId} {
+      allow read: if isAdmin() || 
+                     (request.auth != null && 
+                      request.auth.uid in resource.data.attendees);
+      allow write: if isAdmin();
+    }
+
+    // Artifact requests - admin and assigned users
+    match /artifactRequests/{requestId} {
+      allow read: if isAdmin() || 
+                     (request.auth != null && 
+                      request.auth.uid == resource.data.assignedTo);
+      allow write: if isAdmin();
+    }
+
+    // Metrics snapshots - admin and pilot participants
+    match /metricsSnapshots/{snapshotId} {
+      allow read: if isAdmin() || 
+                     isPilotParticipant(resource.data.pilotId);
+      allow write: if isAdmin();
+    }
+
+    // Case file exports - admin only
+    match /caseFileExports/{exportId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
     }
   }
 }

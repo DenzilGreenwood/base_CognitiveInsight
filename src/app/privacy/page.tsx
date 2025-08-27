@@ -69,7 +69,7 @@ export default function PrivacyPage() {
                   <ul className="text-sm space-y-1">
                     <li>• GDPR & CCPA compliant</li>
                     <li>• End-to-end encryption</li>
-                    <li>• No third-party data sharing</li>
+                    <li>• No third-party data sharing (except workspace collaboration)</li>
                   </ul>
                 </div>
               </div>
@@ -115,6 +115,7 @@ export default function PrivacyPage() {
                     <li><strong>Pilot Program Data:</strong> Information you choose to share (such as use case descriptions, technical requirements, or organizational details) when applying for pilot evaluations</li>
                     <li><strong>Communications:</strong> Content of emails, support requests, and feedback you send to me.</li>
                     <li><strong>Professional Information:</strong> Job title, company size, industry, and relevant technical background when provided</li>
+                    <li><strong>Account & Workspace Data:</strong> Name, email, role, organization, milestone status, uploaded artifacts when using the Pilot Workspace</li>
                   </ul>
                 </div>
 
@@ -155,6 +156,7 @@ export default function PrivacyPage() {
                     <ul className="text-indigo-100 space-y-1 text-sm">
                       <li>• Respond to your inquiries and requests</li>
                       <li>• Evaluate pilot program applications</li>
+                      <li>• Manage pilot workspace access and collaboration</li>
                       <li>• Provide technical support and assistance</li>
                       <li>• Deliver white papers and educational content</li>
                     </ul>
@@ -224,7 +226,7 @@ export default function PrivacyPage() {
                   <ul className="text-indigo-100 space-y-2">
                     <li><strong>Professional Standards:</strong> I maintain strict privacy and security protocols</li>
                     <li><strong>Data Minimization:</strong> I collect only the information necessary for the services</li>
-                    <li><strong>Retention Limits:</strong> Personal data is retained only as long as necessary for business purposes</li>
+                    <li><strong>Retention Limits:</strong> Personal data is retained only as long as necessary for business purposes; workspace data during active pilot participation plus 2 years for archival</li>
                     <li><strong>Incident Response:</strong> Comprehensive procedures for detecting and responding to data breaches</li>
                   </ul>
                 </div>

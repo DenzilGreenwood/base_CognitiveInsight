@@ -232,6 +232,10 @@ export default function PartnershipAgreementPage() {
                   <li>
                     <strong>Data Protection:</strong> I will not share your data with third parties.
                   </li>
+                  <li>
+                    <strong>Pilot Workspace:</strong> A role-based Pilot Workspace will be used for coordination, 
+                    artifact exchange, and activity logging.
+                  </li>
                 </ul>
               </div>
             </section>

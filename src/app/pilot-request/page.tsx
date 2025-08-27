@@ -365,6 +365,14 @@ export default function PilotRequestPage() {
                     'Apply for Pilot Role'
                   )}
                 </Button>
+                
+                {/* Pilot Workspace Information */}
+                <div className="mt-4 bg-indigo-500/10 border border-indigo-500/20 rounded-lg p-4">
+                  <p className="text-indigo-200 text-sm text-center">
+                    <strong>What happens next:</strong> Participants receive a secure Pilot Workspace (role-aware) 
+                    to track responsibilities, milestones, and deliverables.
+                  </p>
+                </div>
               </form>
             </CardContent>
           </Card>
