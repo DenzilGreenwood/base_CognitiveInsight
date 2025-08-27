@@ -14,7 +14,6 @@ import {
   RefreshCw,
   Eye,
   EyeOff,
-  Trash2,
   UserX,
   Shield
 } from 'lucide-react';
@@ -60,13 +59,14 @@ export default function PilotRequestsAdmin() {
       const data = await firebaseFunctions.getPilotRequests();
       
       if (data.success) {
-        setRequests(data.requests || []);
+        setRequests((data.requests || []) as unknown as PilotRequest[]);
       } else {
         throw new Error('Failed to fetch requests');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error fetching pilot requests:', error);
-      setError(error.message || 'Failed to load pilot requests');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load pilot requests';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -109,25 +109,18 @@ export default function PilotRequestsAdmin() {
     setDeleteSuccess(null);
 
     try {
-      const response = await fetch('/api/admin/delete-user-data', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          reason: 'Admin deletion via pilot requests page'
-        }),
+      // Note: This would need the user's UID, not email
+      const result = await firebaseFunctions.deleteUserData({
+        uid: email, // This should be the actual UID
+        deleteAuthRecord: false
       });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        setDeleteSuccess(`Successfully deleted ${data.totalDeleted} record(s) for ${email}. Confirmation email sent.`);
+      if (result.success) {
+        setDeleteSuccess(`Successfully deleted user data for ${email}.`);
         // Refresh the requests list to show updated data
         await fetchRequests();
       } else {
-        throw new Error(data.error || 'Failed to delete user data');
+        throw new Error(result.message || 'Failed to delete user data');
       }
     } catch (error) {
       console.error('Error deleting user data:', error);

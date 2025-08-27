@@ -1,25 +1,18 @@
-// src/lib/firebase-admin.ts
-import { cert, getApp, getApps, initializeApp } from "firebase-admin/app";
+// Server-only Firebase Admin configuration
+// For server components, route handlers, or functions
+import { getApps, initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { getStorage } from "firebase-admin/storage";
 import { getAuth } from "firebase-admin/auth";
+import { getStorage } from "firebase-admin/storage";
 
-let _db: any = null;
-let _storage: any = null;
-let _auth: any = null;
-let _initialized = false;
-
-function initializeFirebaseAdmin() {
-  if (_initialized) {
-    return { db: _db, storage: _storage, auth: _auth };
-  }
-
+// Initialize Firebase Admin if not already done
+if (!getApps().length) {
   try {
-    // ---- Normalize env ----
+    // Normalize env
     const projectId = process.env.FIREBASE_PROJECT_ID?.trim();
     const clientEmail = process.env.FIREBASE_CLIENT_EMAIL?.trim();
 
-    // Prefer plain key; support BASE64 fallback.
+    // Prefer plain key; support BASE64 fallback
     let privateKey = process.env.FIREBASE_PRIVATE_KEY || process.env.FIREBASE_PRIVATE_KEY_BASE64;
 
     if (privateKey?.includes("BEGIN PRIVATE KEY") === false && process.env.FIREBASE_PRIVATE_KEY_BASE64) {
@@ -37,34 +30,29 @@ function initializeFirebaseAdmin() {
       privateKey = privateKey.replace(/\\n/g, "\n");
     }
 
-    // ---- Validate early (server only) ----
-    if (!projectId || !clientEmail || !privateKey) {
+    if (projectId && clientEmail && privateKey) {
+      initializeApp({
+        credential: cert({ projectId, clientEmail, privateKey }),
+        projectId,
+      });
+    } else {
       console.warn("Missing Firebase Admin env variables");
-      _initialized = true;
-      return { db: null, storage: null, auth: null };
     }
-
-    // ---- Initialize (idempotent) ----
-    const app = getApps().length
-      ? getApp()
-      : initializeApp({
-          credential: cert({ projectId, clientEmail, privateKey }),
-          projectId, // optional but harmless
-        });
-
-    _db = getFirestore(app);
-    _storage = getStorage(app);
-    _auth = getAuth(app);
-    _initialized = true;
-
-    return { db: _db, storage: _storage, auth: _auth };
   } catch (error) {
     console.warn("Firebase Admin initialization failed:", error);
-    _initialized = true;
-    return { db: null, storage: null, auth: null };
   }
 }
 
+// Export the initialized services
+export const adminDb = getFirestore();
+export const adminAuth = getAuth();
+export const adminStorage = getStorage();
+
+// Legacy function for backward compatibility
 export function getFirebaseAdmin() {
-  return initializeFirebaseAdmin();
+  return {
+    db: adminDb,
+    auth: adminAuth,
+    storage: adminStorage
+  };
 }

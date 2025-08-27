@@ -37,7 +37,7 @@ const WhitePaperSection: React.FC<WhitePaperSectionProps> = ({ className }) => {
       });
 
       if (result.ok) {
-        setMessage("Thank you for your interest in collaborating on verifiable AI auditability. Each submission is reviewed to ensure mutual fit. If there's alignment, you'll receive the white paper and partnership details by email. This is about co-designing solutions—please review the material and, if it resonates, let's explore how we can work together to shape the future of AI compliance.");
+        setMessage("Thank you for your interest in collaborating on verifiable AI auditability. Each submission is reviewed to ensure mutual fit. If there&apos;s alignment, you&apos;ll receive the white paper and partnership details by email. This is about co-designing solutions—please review the material and, if it resonates, let&apos;s explore how we can work together to shape the future of AI compliance.");
         setStatus("success");
         
         // Clear form
@@ -46,9 +46,10 @@ const WhitePaperSection: React.FC<WhitePaperSectionProps> = ({ className }) => {
         setMessage("Something went wrong. Please try again.");
         setStatus("error");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("White paper request error:", error);
-      setMessage(error.message || "Network error. Please check your connection and try again.");
+      const errorMessage = error instanceof Error ? error.message : "Network error. Please check your connection and try again.";
+      setMessage(errorMessage);
       setStatus("error");
     }
   };

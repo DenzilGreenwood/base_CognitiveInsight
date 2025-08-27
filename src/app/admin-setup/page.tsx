@@ -9,7 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserService } from '@/lib/user-service';
+import type { UserProfile } from '@/lib/user-service';
 import { SettingsService } from '@/lib/settings-service';
+import { firebaseFunctions } from '@/lib/firebase-functions';
 
 export default function AdminSetupPage() {
   const { user } = useAuth();
@@ -17,7 +19,7 @@ export default function AdminSetupPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [selectedRole, setSelectedRole] = useState<'regulator' | 'auditor' | 'ai_builder' | 'owner_admin'>('regulator');
-  const [userProfile, setUserProfile] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -64,20 +66,10 @@ export default function AdminSetupPage() {
 
       // Set Firebase Auth custom claims for admin access
       try {
-        const response = await fetch('/api/admin/set-user-claims', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            uid: user.uid,
-            role: selectedRole
-          })
+        await firebaseFunctions.setUserClaims({
+          uid: user.uid,
+          role: selectedRole
         });
-
-        if (!response.ok) {
-          console.warn('Failed to set custom claims - user may need to re-login for full admin access');
-        }
       } catch (claimsError) {
         console.warn('Failed to set custom claims:', claimsError);
       }
@@ -114,11 +106,12 @@ export default function AdminSetupPage() {
         router.push('/admin');
       }, 2000);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error setting up admin:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to set up admin access';
       setMessage({ 
         type: 'error', 
-        text: error.message || 'Failed to set up admin access' 
+        text: errorMessage
       });
     } finally {
       setLoading(false);
@@ -221,7 +214,7 @@ export default function AdminSetupPage() {
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-indigo-200">Select Admin Role</label>
-                  <Select value={selectedRole} onValueChange={(value: any) => setSelectedRole(value)}>
+                  <Select value={selectedRole} onValueChange={(value: 'regulator' | 'auditor' | 'ai_builder' | 'owner_admin') => setSelectedRole(value)}>
                     <SelectTrigger className="bg-white/10 border-white/20 text-white">
                       <SelectValue />
                     </SelectTrigger>

@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { firebaseFunctions } from "@/lib/firebase-functions";
 
 interface FormData {
   name: string;
@@ -98,27 +99,23 @@ export default function ContactPage() {
     setErrorMessage("");
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          source: 'contact-page'
-        }),
+      const result = await firebaseFunctions.submitContact({
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject || `${formData.category || 'General'} Inquiry`,
+        message: formData.message,
+        organization: formData.organization || undefined,
+        phone: undefined // Not collected in this form
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (result.success) {
         setSubmitStatus('success');
         // Redirect to thank you page after a short delay
         setTimeout(() => {
           router.push('/thank-you?type=contact');
         }, 2000);
       } else {
-        throw new Error(data.error || 'Failed to submit contact form');
+        throw new Error(result.message || 'Failed to submit contact form');
       }
     } catch (error) {
       console.error('Contact form error:', error);
@@ -141,7 +138,7 @@ export default function ContactPage() {
             <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-6" />
             <h1 className="text-3xl font-bold mb-4">Message Sent Successfully!</h1>
             <p className="text-indigo-200 mb-6">
-              Thank you for reaching out. I'll get back to you within 24 hours.
+              Thank you for reaching out. I&apos;ll get back to you within 24 hours.
             </p>
             <p className="text-sm text-indigo-300">Redirecting you to confirmation page...</p>
           </motion.div>

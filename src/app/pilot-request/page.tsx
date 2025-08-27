@@ -115,10 +115,11 @@ export default function PilotRequestPage() {
       } else {
         throw new Error(result.message || 'Failed to submit pilot request');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Pilot request error:', error);
       setSubmitStatus('error');
-      setErrorMessage(error.message || 'An unexpected error occurred');
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      setErrorMessage(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

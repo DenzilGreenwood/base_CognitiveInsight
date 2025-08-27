@@ -64,9 +64,10 @@ const CTASection: React.FC<CTASectionProps> = ({ handlePilot, className }) => {
         setMessage(result.message || "Something went wrong. Please try again.");
         setStatus("error");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Pilot request error:", error);
-      setMessage(error.message || "Network error. Please check your connection and try again.");
+      const errorMessage = error instanceof Error ? error.message : "Network error. Please check your connection and try again.";
+      setMessage(errorMessage);
       setStatus("error");
     }
   };

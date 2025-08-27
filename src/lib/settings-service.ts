@@ -1,5 +1,5 @@
 import { doc, setDoc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from './firebase-client';
 
 export interface PlatformSettings {
   id: string;

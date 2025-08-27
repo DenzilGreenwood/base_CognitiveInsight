@@ -42,9 +42,10 @@ export default function ModernEarlyAccessForm({ onClose }: { onClose: () => void
         setStatus("error");
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Submission error:", error);
-      setErrorMessage(error.message || "Network error. Please check your connection and try again.");
+      const errorMessage = error instanceof Error ? error.message : "Network error. Please check your connection and try again.";
+      setErrorMessage(errorMessage);
       setStatus("error");
     }
   };
@@ -115,7 +116,7 @@ export default function ModernEarlyAccessForm({ onClose }: { onClose: () => void
 
       {/* Help text */}
       <div className="mt-4 text-xs text-slate-400/70">
-        <p>* Required field. I'll never share your email or spam you.</p>
+        <p>* Required field. I&apos;ll never share your email or spam you.</p>
         <p>Questions? Email me at <a href="mailto:insight@cognitiveinsight.com" className="text-indigo-400 hover:text-indigo-300">insight@cognitiveinsight.com</a></p>
       </div>
     </form>

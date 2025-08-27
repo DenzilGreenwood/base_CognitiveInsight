@@ -2,6 +2,8 @@
 
 import { z } from "zod";
 import { firebaseFunctions } from "@/lib/firebase-functions";
+import { generateCryptographicCommitment, type GenerateCryptographicCommitmentInput } from "@/ai/flows/generate-cryptographic-commitment";
+import { verifyCryptographicCommitment, type VerifyCryptographicCommitmentInput } from "@/ai/flows/verify-cryptographic-commitment";
 
 const LeadSchema = z.object({
   name: z.string().min(2),
@@ -28,9 +30,10 @@ export async function createLead(input: LeadInput) {
     });
 
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating lead:', error);
-    return { ok: false, error: error.message || 'Network error' };
+    const errorMessage = error instanceof Error ? error.message : 'Network error';
+    return { ok: false, error: errorMessage };
   }
 }
 
@@ -48,7 +51,8 @@ export async function runDemoStep(step: string, payload?: unknown) {
       return { ok: true, next: "capsule", info: { inferences: 5000 } };
     case "capsule": {
       // toy math consistent with your copy; tune freely
-      const { datasetGb = 10000, auditRatio = 0.05 } = (payload as any) ?? {};
+      const payloadData = payload as { datasetGb?: number; auditRatio?: number } | undefined;
+      const { datasetGb = 10000, auditRatio = 0.05 } = payloadData ?? {};
       const baseEvents = Math.round(datasetGb * 0.0125); // arbitrary event density
       const audited = Math.max(1, Math.round(baseEvents * auditRatio));
       const capsules = Math.max(1, Math.round(audited / 2)); // illustration
@@ -62,5 +66,27 @@ export async function runDemoStep(step: string, payload?: unknown) {
       return { ok: true, done: true, info: { verified: true, ms: 30 } };
     default:
       return { ok: false, error: "Unknown step" };
+  }
+}
+
+export async function generateCommitmentAction(input: GenerateCryptographicCommitmentInput) {
+  try {
+    const result = await generateCryptographicCommitment(input);
+    return { success: true, data: result };
+  } catch (error: unknown) {
+    console.error('Error generating commitment:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return { success: false, error: errorMessage };
+  }
+}
+
+export async function verifyCommitmentAction(input: VerifyCryptographicCommitmentInput) {
+  try {
+    const result = await verifyCryptographicCommitment(input);
+    return { success: true, data: result };
+  } catch (error: unknown) {
+    console.error('Error verifying commitment:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return { success: false, error: errorMessage };
   }
 }

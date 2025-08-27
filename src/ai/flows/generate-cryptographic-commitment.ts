@@ -44,7 +44,7 @@ export async function generateCryptographicCommitment(
 
 const prompt = ai.definePrompt({
   name: 'generateCryptographicCommitmentPrompt',
-  input: {schema: GenerateCryptographicCommitmentInputSchema},
+  input: {schema: GenerateCryptographicCommitmentInputSchema.extend({ hash: z.string() })},
   output: {schema: GenerateCryptographicCommitmentOutputSchema},
   prompt: `You are an expert in cryptographic commitments and AI compliance.
 
@@ -53,6 +53,7 @@ const prompt = ai.definePrompt({
   Data Description: {{{dataDescription}}}
   Sensitive Data (if any): {{{sensitiveData}}}
   Commitment Details: {{{commitmentDetails}}}
+  Hash: {{{hash}}}
 
   Generate a receipt that clearly proves the integrity of the AI development process to regulators.
 
@@ -76,7 +77,12 @@ const generateCryptographicCommitmentFlow = ai.defineFlow(
     // For this example, we'll just return a placeholder hash.
     const hash = 'SHA256-PLACEHOLDER-' + Math.random().toString(36).substring(7);
 
-    const {output} = await prompt({...input, hash});
+    const {output} = await prompt({
+      dataDescription: input.dataDescription,
+      sensitiveData: input.sensitiveData,
+      commitmentDetails: input.commitmentDetails,
+      hash
+    });
     return output!;
   }
 );

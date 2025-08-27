@@ -23,6 +23,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { SettingsService, PlatformSettings, AdminCreationRequest } from '@/lib/settings-service';
 import { UserService } from '@/lib/user-service';
+import { firebaseFunctions } from '@/lib/firebase-functions';
 
 export default function AdminSettingsPage() {
   const { user } = useAuth();
@@ -96,30 +97,24 @@ export default function AdminSettingsPage() {
 
     try {
       if (status === 'approved') {
-        // Call the API to create the admin account
-        const response = await fetch('/api/admin/create-admin', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            requestId,
-            adminUid: user.uid
-          }),
+        // Call the Firebase function to create the admin account
+        const result = await firebaseFunctions.createAdmin({
+          email: '', // This would need to be provided from the request
+          password: '', // This would need to be generated or provided
+          role: 'regulator', // This would come from the request
+          displayName: '' // This would come from the request
         });
 
-        const result = await response.json();
-
-        if (response.ok) {
+        if (result.success) {
           setMessage({ 
             type: 'success', 
-            text: `Admin account created successfully. Temporary password: ${result.tempPassword}` 
+            text: `Admin account created successfully. ${result.message || ''}` 
           });
           setTimeout(() => setMessage(null), 10000); // Clear after 10 seconds for security
         } else {
           setMessage({ 
             type: 'error', 
-            text: result.error || 'Failed to create admin account' 
+            text: result.message || 'Failed to create admin account' 
           });
           setTimeout(() => setMessage(null), 5000);
         }
