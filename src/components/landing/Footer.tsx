@@ -24,6 +24,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
         <div className="flex items-center gap-4 text-indigo-200/80 text-sm">
           <a className="hover:text-white" href="/privacy" title="Privacy Policy">Privacy</a>
           <a className="hover:text-white" href="/contact" title="Contact Us">Contact</a>
+          <a className="hover:text-white text-xs opacity-60" href="/login" title="Admin Portal">Admin</a>
         </div>
       </div>
       

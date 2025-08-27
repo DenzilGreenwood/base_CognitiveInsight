@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { CheckCircle, FileText, Rocket } from 'lucide-react';
+import { Suspense } from 'react';
 
-export default function ThankYouPage() {
+function ThankYouContent() {
   const searchParams = useSearchParams();
   const type = searchParams?.get('type') || 'general';
 

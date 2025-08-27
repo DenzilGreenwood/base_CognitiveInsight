@@ -35,6 +35,14 @@ export default function AdminDashboard() {
       path: "/admin/contact-submissions",
       color: "from-green-500/20 to-green-600/20",
       borderColor: "border-green-500/30"
+    },
+    {
+      title: "Admin Settings",
+      description: "Manage platform settings and admin access",
+      icon: <Shield className="w-8 h-8 text-purple-400" />,
+      path: "/admin/settings",
+      color: "from-purple-500/20 to-purple-600/20",
+      borderColor: "border-purple-500/30"
     }
   ];
 
@@ -99,7 +107,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Admin Sections */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {adminSections.map((section, index) => (
               <motion.div
                 key={section.path}

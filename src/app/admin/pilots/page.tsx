@@ -152,7 +152,7 @@ export default function ActivePilotsAdmin() {
             <div className="flex items-center space-x-4">
               <Button
                 variant="outline"
-                onClick={() => router.push('/admin/dashboard')}
+                onClick={() => router.push('/admin')}
                 className="border-white/20 text-white hover:bg-white/10"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />

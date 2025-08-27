@@ -108,4 +108,6 @@ functions/node_modules/
 # Google Cloud
 .gcloudignoresendgrid.env
 
+# sendgrid 
 sendgrid.env
+sendgrid.env.*

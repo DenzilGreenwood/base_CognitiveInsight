@@ -29,62 +29,6 @@
       ]
     },
     {
-      "collectionGroup": "pilotRequests",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createdAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "pilotRequests",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "ownerUserId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "updatedAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "pilotRequests",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "sector",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createdAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "pilotRequests",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "roleHint",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createdAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "pilots",
       "queryScope": "COLLECTION",
       "fields": [

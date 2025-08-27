@@ -1,7 +1,8 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "sonner";
-import { AuthProvider } from '@/contexts/AuthContext';
+import { ConditionalAuthProvider } from '@/components/ConditionalAuthProvider';
+
 
 export const metadata: Metadata = {
   title: 'CognitiveInsight',
@@ -21,10 +22,10 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="font-sans antialiased">
-        <AuthProvider>
+        <ConditionalAuthProvider>
           <Toaster richColors position="top-center" />
           {children}
-        </AuthProvider>
+        </ConditionalAuthProvider>
       </body>
     </html>
   );

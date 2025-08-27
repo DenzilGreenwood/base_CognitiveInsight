@@ -2,14 +2,16 @@
 import { cert, getApp, getApps, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
+import { getAuth } from "firebase-admin/auth";
 
 let _db: any = null;
 let _storage: any = null;
+let _auth: any = null;
 let _initialized = false;
 
 function initializeFirebaseAdmin() {
   if (_initialized) {
-    return { db: _db, storage: _storage };
+    return { db: _db, storage: _storage, auth: _auth };
   }
 
   try {
@@ -39,7 +41,7 @@ function initializeFirebaseAdmin() {
     if (!projectId || !clientEmail || !privateKey) {
       console.warn("Missing Firebase Admin env variables");
       _initialized = true;
-      return { db: null, storage: null };
+      return { db: null, storage: null, auth: null };
     }
 
     // ---- Initialize (idempotent) ----
@@ -52,13 +54,14 @@ function initializeFirebaseAdmin() {
 
     _db = getFirestore(app);
     _storage = getStorage(app);
+    _auth = getAuth(app);
     _initialized = true;
 
-    return { db: _db, storage: _storage };
+    return { db: _db, storage: _storage, auth: _auth };
   } catch (error) {
     console.warn("Firebase Admin initialization failed:", error);
     _initialized = true;
-    return { db: null, storage: null };
+    return { db: null, storage: null, auth: null };
   }
 }
 
