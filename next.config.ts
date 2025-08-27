@@ -18,7 +18,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Removed output: 'export' and distDir to enable API routes
+  // Disable static export for now to enable API routes
+  // output: 'export',
+  // distDir: 'out',
+  trailingSlash: true,
   
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -62,5 +65,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
-    

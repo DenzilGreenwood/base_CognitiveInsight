@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { firebaseFunctions } from '@/lib/firebase-functions';
 
 interface PilotRequest {
   id: string;
@@ -56,25 +57,16 @@ export default function PilotRequestsAdmin() {
     setConfigMessage(null);
     
     try {
-      const response = await fetch('/api/admin/pilot-requests');
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch requests: ${response.status}`);
-      }
-      
-      const data = await response.json();
+      const data = await firebaseFunctions.getPilotRequests();
       
       if (data.success) {
         setRequests(data.requests || []);
-        if (data.message) {
-          setConfigMessage(data.message);
-        }
       } else {
-        throw new Error(data.error || 'Failed to fetch requests');
+        throw new Error('Failed to fetch requests');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching pilot requests:', error);
-      setError(error instanceof Error ? error.message : 'Failed to load pilot requests');
+      setError(error.message || 'Failed to load pilot requests');
     } finally {
       setLoading(false);
     }

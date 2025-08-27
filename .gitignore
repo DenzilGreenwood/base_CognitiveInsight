@@ -111,3 +111,9 @@ functions/node_modules/
 # sendgrid 
 sendgrid.env
 sendgrid.env.*
+
+# out put path 
+out
+
+# firebase output 
+.firebase 

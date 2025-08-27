@@ -79,3 +79,18 @@ function ThankYouContent() {
     </main>
   );
 }
+
+export default function ThankYouPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen w-full text-white bg-gradient-to-b from-indigo-900 via-slate-900 to-slate-950 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-indigo-200">Loading...</p>
+        </div>
+      </main>
+    }>
+      <ThankYouContent />
+    </Suspense>
+  );
+}

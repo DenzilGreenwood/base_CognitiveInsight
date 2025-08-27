@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { firebaseFunctions } from "@/lib/firebase-functions";
 
 export default function ModernEarlyAccessForm({ onClose }: { onClose: () => void }) {
   const [email, setEmail] = useState("");
@@ -17,36 +18,33 @@ export default function ModernEarlyAccessForm({ onClose }: { onClose: () => void
     setSuccessMessage("");
 
     try {
-      const res = await fetch("/api/early-access-sendgrid", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, useCase })
+      const result = await firebaseFunctions.submitEarlyAccess({
+        email: email.trim(),
+        name: name.trim() || undefined,
+        useCase: useCase.trim() || undefined
       });
 
-      const data = await res.json();
+      if (result.ok) {
+        setSuccessMessage("Thanks—I'll be in touch!");
+        setStatus("success");
+        
+        // Clear form on success
+        setEmail("");
+        setName("");
+        setUseCase("");
 
-      if (!res.ok) {
-        setErrorMessage(data.error || "Something went wrong. Please try again.");
+        // Auto-close after 3 seconds
+        setTimeout(() => {
+          onClose();
+        }, 3000);
+      } else {
+        setErrorMessage("Something went wrong. Please try again.");
         setStatus("error");
-        return;
       }
 
-      setSuccessMessage(data.message || "Thanks—I'll be in touch!");
-      setStatus("success");
-      
-      // Clear form on success
-      setEmail("");
-      setName("");
-      setUseCase("");
-
-      // Auto-close after 3 seconds
-      setTimeout(() => {
-        onClose();
-      }, 3000);
-
-    } catch (error) {
+    } catch (error: any) {
       console.error("Submission error:", error);
-      setErrorMessage("Network error. Please check your connection and try again.");
+      setErrorMessage(error.message || "Network error. Please check your connection and try again.");
       setStatus("error");
     }
   };

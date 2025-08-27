@@ -1,6 +1,7 @@
 "use server";
 
 import { z } from "zod";
+import { firebaseFunctions } from "@/lib/firebase-functions";
 
 const LeadSchema = z.object({
   name: z.string().min(2),
@@ -19,30 +20,17 @@ export async function createLead(input: LeadInput) {
   }
 
   try {
-    // Call the SendGrid-enabled early access API
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/early-access-sendgrid`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: parsed.data.email,
-        name: parsed.data.name,
-        useCase: parsed.data.company ? `${parsed.data.company}${parsed.data.notes ? ` - ${parsed.data.notes}` : ''}` : parsed.data.notes,
-        source: parsed.data.source || 'form'
-      }),
+    // Use Firebase callable function for early access
+    const result = await firebaseFunctions.submitEarlyAccess({
+      email: parsed.data.email,
+      name: parsed.data.name,
+      useCase: parsed.data.company ? `${parsed.data.company}${parsed.data.notes ? ` - ${parsed.data.notes}` : ''}` : parsed.data.notes,
     });
 
-    const result = await response.json();
-    
-    if (!response.ok) {
-      return { ok: false, error: result.error || 'Failed to create lead' };
-    }
-
     return result;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating lead:', error);
-    return { ok: false, error: 'Network error' };
+    return { ok: false, error: error.message || 'Network error' };
   }
 }
 

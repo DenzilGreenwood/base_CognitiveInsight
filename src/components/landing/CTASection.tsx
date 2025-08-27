@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { firebaseFunctions } from "@/lib/firebase-functions";
 
 interface CTASectionProps {
   handlePilot?: () => void;
@@ -41,37 +42,31 @@ const CTASection: React.FC<CTASectionProps> = ({ handlePilot, className }) => {
     setMessage("");
 
     try {
-      const response = await fetch("/api/pilot-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          useCase: `Pilot Request - ${formData.organization}: ${formData.pilotScope}`,
-          source: "pilot-request"
-        })
+      const result = await firebaseFunctions.submitPilotRequest({
+        name: formData.name,
+        email: formData.email,
+        organization: formData.organization,
+        description: `Pilot Request - ${formData.organization}: ${formData.pilotScope}`,
+        source: "cta-section"
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setMessage(data.error || "Something went wrong. Please try again.");
+      if (result.success) {
+        setMessage("Thank you! I'll reach out to schedule a scoping conversation.");
+        setStatus("success");
+        
+        // Clear form and close after delay
+        setFormData({ name: "", email: "", organization: "", pilotScope: "" });
+        setTimeout(() => {
+          setShowPilotForm(false);
+          setStatus("idle");
+        }, 3000);
+      } else {
+        setMessage(result.message || "Something went wrong. Please try again.");
         setStatus("error");
-        return;
       }
-
-      setMessage("Thank you! I'll reach out to schedule a scoping conversation.");
-      setStatus("success");
-      
-      // Clear form and close after delay
-      setFormData({ name: "", email: "", organization: "", pilotScope: "" });
-      setTimeout(() => {
-        setShowPilotForm(false);
-        setStatus("idle");
-      }, 3000);
-
-    } catch (error) {
+    } catch (error: any) {
       console.error("Pilot request error:", error);
-      setMessage("Network error. Please check your connection and try again.");
+      setMessage(error.message || "Network error. Please check your connection and try again.");
       setStatus("error");
     }
   };

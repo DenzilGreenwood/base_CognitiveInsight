@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { firebaseFunctions } from "@/lib/firebase-functions";
 
 interface FormData {
   name: string;
@@ -97,32 +98,27 @@ export default function PilotRequestPage() {
     setErrorMessage("");
 
     try {
-      const response = await fetch('/api/pilot-request', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          source: 'pilot-request-page'
-        }),
+      const result = await firebaseFunctions.submitPilotRequest({
+        name: formData.name,
+        email: formData.email,
+        organization: formData.organization,
+        description: formData.pilotScope,
+        source: 'pilot-request-page'
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (result.success) {
         setSubmitStatus('success');
         // Redirect to thank you page after a short delay
         setTimeout(() => {
           router.push('/thank-you?type=pilot');
         }, 2000);
       } else {
-        throw new Error(data.error || 'Failed to submit pilot request');
+        throw new Error(result.message || 'Failed to submit pilot request');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Pilot request error:', error);
       setSubmitStatus('error');
-      setErrorMessage(error instanceof Error ? error.message : 'An unexpected error occurred');
+      setErrorMessage(error.message || 'An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
     }
